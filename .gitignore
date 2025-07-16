@@ -28,3 +28,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+
+# 忽略 lock 文件
+package-lock.json
