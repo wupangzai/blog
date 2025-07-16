@@ -5,7 +5,8 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "vuex": ["./node_modules/vuex/types/index.d.ts"] // vuex的 esm exports vite无法识别，根据这个路径去加载类型
     }
   }
 }
