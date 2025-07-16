@@ -1,5 +1,5 @@
-import { State } from "@/store/modules/common/state";
-import { ActionContext } from "vuex";
+import { State } from '@/store/modules/common/state';
+import { ActionContext } from 'vuex';
 
 type RootState = {
   version: string;
