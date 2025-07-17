@@ -1,7 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
-  // todo
+  {
+    path: '/',
+    component: import('@/components/page-content/index.vue'),
+  },
 ];
 
 export default routes;
