@@ -2,13 +2,13 @@
 <template>
   <div>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
-    <el-dialog v-model="props.visible" width="500">
+    <el-dialog v-model="props.visible" v-bind="{ ...props }">
       <template #header>
         <span class="custom-header">{{ props.title }}</span>
       </template>
       <slot></slot>
-      <template #footer>
-        <div class="dialog-footer" v-if="footer">
+      <template #footer v-if="props.footer">
+        <div class="dialog-footer" v-if="props.footer">
           <el-button @click="handleClose('cancel')">Cancel</el-button>
           <el-button type="info" @click="handleClose('confirm')"> Confirm </el-button>
         </div>
@@ -20,11 +20,15 @@
 <script lang="ts" setup>
 import type { CloseType } from '@/components/common/dialog/index';
 
-const props = defineProps({
-  title: String,
-  visible: Boolean,
-  footer: Boolean,
-});
+const props = defineProps<{
+  title?: string;
+  visible?: boolean;
+  footer?: boolean;
+  width?: string;
+  showClose?: boolean;
+  closeOnClickModal?: boolean;
+  closeOnPressEscape?: boolean;
+}>();
 
 const emits = defineEmits<{
   (e: 'update:visible', value: boolean, type: CloseType): void;

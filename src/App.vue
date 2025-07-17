@@ -1,5 +1,9 @@
 <template>
-  <div><el-button>123</el-button></div>
+  <div>
+    <page-header></page-header>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PageHeader from '@/components/common/page-header/index.vue';
+</script>
