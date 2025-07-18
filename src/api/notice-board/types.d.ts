@@ -1,3 +1,5 @@
 export interface NoticeBoard {
-  content: string;
+  data: {
+    content: string;
+  };
 }

@@ -5,7 +5,7 @@ export interface Page {
   size: number;
 }
 
-export interface ArticleList {
+interface ArticleItem {
   id: string;
   category: TagsCardType.CategoryListItem;
   cover: string;
@@ -14,8 +14,12 @@ export interface ArticleList {
   summary: string;
   tags: TagsCardType.TagListItem[];
   title: string;
+}
+
+export interface ArticleList {
   current: number;
   page: number;
   size: number;
   total: number;
+  data: ArticleItem[];
 }

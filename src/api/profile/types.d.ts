@@ -1,4 +1,4 @@
-export interface ProfileDetail {
+export interface ProfileDetailData {
   author: string;
   avatar: string;
   csdnHomepage: string;
@@ -10,9 +10,17 @@ export interface ProfileDetail {
   zhihuHomepage: string;
 }
 
-export interface ProfileStatistics {
+export interface ProfileDetail {
+  data: ProfileDetailData;
+}
+
+export interface ProfileStatisticsData {
   articleTotalCount: number;
   categoryTotalCount: number;
   pvTotalCount: number;
   tagTotalCount: number;
+}
+
+export interface ProfileStatistics {
+  data: ProfileStatisticsData;
 }

@@ -6,7 +6,7 @@ interface State {
   name: string;
   test: string;
 
-  profile: Profile.ProfileDetail;
+  profile: Profile.ProfileDetailData;
 }
 
 const state: State = {

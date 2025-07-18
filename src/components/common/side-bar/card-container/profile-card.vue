@@ -25,8 +25,8 @@ import { computed } from 'vue';
 import { keyToLabelMap, linksMap } from '@/components/common/side-bar/card-container/const';
 
 interface Props {
-  profile: Profile.ProfileDetail;
-  profileStatistics: Profile.ProfileStatistics;
+  profile: Profile.ProfileDetailData;
+  profileStatistics: Profile.ProfileStatisticsData;
 }
 const props = defineProps<Props>();
 
@@ -39,6 +39,8 @@ const tagsMapList = computed(() => {
     };
   });
 });
+
+console.log('[ props.profile ] >', props.profile);
 </script>
 
 <style lang="less" scoped>

@@ -20,7 +20,7 @@ const actions: ActionTree<State, RootState> & Actions = {
 
   async [GETPROFILE_ACTION](context) {
     const profile = await API.profileDetail.getProfileDetail();
-    context.commit('SET_PROFILE', profile);
+    context.commit('SET_PROFILE', profile!.data);
   },
 };
 

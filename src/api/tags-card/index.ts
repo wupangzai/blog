@@ -1,9 +1,9 @@
 import { http } from '@/packages/axios/common';
-import type { CategoryListItem, TagListItem } from '@/api/tags-card/types';
+import type { TagsCardType } from '@/api/types';
 
 export async function getCategoryList(size: number) {
   try {
-    const res = await http.postJson<CategoryListItem[]>('/api/category/list', {
+    const res = await http.postJson<TagsCardType.CategoryList>('/api/category/list', {
       size,
     });
 
@@ -15,7 +15,7 @@ export async function getCategoryList(size: number) {
 
 export async function getTagList(size: number) {
   try {
-    const res = await http.postJson<TagListItem[]>('/api/tag/list', {
+    const res = await http.postJson<TagsCardType.TagList>('/api/tag/list', {
       size,
     });
 

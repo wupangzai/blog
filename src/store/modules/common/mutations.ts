@@ -6,7 +6,7 @@ import type { Profile } from '@/api/types';
 type Mutations = {
   [INCREMENT](state: State, payload: number): number;
   [DECREMENT](state: State): void;
-  [SET_PROFILE](state: State, payload: Profile.ProfileDetail): void;
+  [SET_PROFILE](state: State, payload: Profile.ProfileDetailData): void;
 };
 
 const mutations: MutationTree<State> & Mutations = {

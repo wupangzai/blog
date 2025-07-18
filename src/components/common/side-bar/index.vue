@@ -25,7 +25,7 @@ import type { Profile } from '@/api/types';
 
 const { profile } = useStates('commonModule', ['profile']);
 
-const profileStatistics = ref<Profile.ProfileStatistics>({
+const profileStatistics = ref<Profile.ProfileStatisticsData>({
   articleTotalCount: 0,
   categoryTotalCount: 0,
   pvTotalCount: 0,
@@ -34,7 +34,7 @@ const profileStatistics = ref<Profile.ProfileStatistics>({
 async function getProfileStatistics() {
   const res = await API.profileDetail.getProfileStatistics();
   if (res) {
-    profileStatistics.value = res;
+    profileStatistics.value = res.data;
   }
 }
 
@@ -42,12 +42,12 @@ const categoriesList = ref<CategoryListItem[]>();
 const tagsList = ref<TagListItem[]>();
 
 async function getTagList() {
-  const listWithData = await Promise.all([
+  const [categoriesData, tagsListData] = await Promise.all([
     API.tagsCard.getCategoryList(10),
     API.tagsCard.getTagList(20),
   ]);
-  if (listWithData) {
-    [categoriesList.value, tagsList.value] = listWithData;
+  if (categoriesData && tagsListData) {
+    [categoriesList.value, tagsList.value] = [categoriesData.data, tagsListData.data];
   }
 }
 

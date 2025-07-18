@@ -36,7 +36,7 @@ import backFileSvg from '@/assets/svg/backFile.svg';
 import isTopLabel from '@/components/common/is-top-label/index.vue';
 
 interface Props {
-  pageCard: ArticleType.ArticleList;
+  pageCard: ArticleType.ArticleItem;
 }
 
 const props = defineProps<Props>();
