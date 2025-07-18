@@ -1,5 +1,6 @@
 import ElementUI from './element-plus';
-import http from '@/packages/axios/index';
+import http from '@/packages/axios';
+import AOS from '@/packages/aos';
 import type { App } from 'vue';
 
 const packagesList = [ElementUI, http];
@@ -9,6 +10,10 @@ export default {
   install(app: App) {
     packagesList.forEach((packageModule) => {
       app.use(packageModule);
+    });
+
+    AOS.init({
+      duration: 1200,
     });
   },
 };

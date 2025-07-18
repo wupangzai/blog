@@ -1,9 +1,9 @@
 <template>
   <div class="page-content">
-    <div class="router-content">
+    <div class="router-content" data-aos="fade-up">
       <router-view />
     </div>
-    <div class="card-content">
+    <div class="card-content" data-aos="fade-up" data-aos-duration="1000">
       <side-bar></side-bar>
     </div>
   </div>
