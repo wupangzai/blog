@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <page-header></page-header>
     <router-view></router-view>
   </div>
@@ -18,3 +18,9 @@ onMounted(async () => {
   getProfile_Action();
 });
 </script>
+
+<style lang="css" scoped>
+.app {
+  position: relative;
+}
+</style>

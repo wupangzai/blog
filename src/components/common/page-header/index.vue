@@ -51,6 +51,9 @@ const switchChecked = ref(false);
 
 <style lang="less" scoped>
 .page-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
