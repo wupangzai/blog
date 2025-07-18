@@ -31,6 +31,7 @@ import headerContent from './header-content.vue';
 import contentBtns from './content-btns.vue';
 import contentOperations from './content-operations/content-operations.vue';
 import operationAvatar from './content-operations/operation-avatar.vue';
+import { useRouter } from 'vue-router';
 
 interface Props {
   contentTitle?: string;
@@ -42,8 +43,10 @@ const props = withDefaults(defineProps<Props>(), {
   btnNames: () => defaultBtnsList,
 });
 
-function changeActiveBtn(name: string) {
-  console.log('[ name ] >', name);
+const router = useRouter();
+function changeActiveBtn(path: string) {
+  router.push(path);
+  console.log('[ name ] >', path);
 }
 
 const switchChecked = ref(false);

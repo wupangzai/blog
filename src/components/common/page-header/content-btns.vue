@@ -6,7 +6,7 @@
       :ref="(el) => (btnRefs[index] = el as HTMLElement)"
       class="btn"
       :class="[{ 'is-active': isActiveNameEqualName(btn.name) }]"
-      @click="handleClick(btn.name, index)"
+      @click="handleClick(btn.name, index, btn.path)"
     >
       {{ btn.label }}
     </div>
@@ -32,10 +32,10 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits<{
   (e: 'changeActiveBtn', name: string): void;
 }>();
-function handleClick(name: string, index: number) {
+function handleClick(name: string, index: number, path: string) {
   currentActiveName.value = name;
   currentIndex.value = index;
-  emits('changeActiveBtn', name);
+  emits('changeActiveBtn', path);
 }
 
 let defaultActiveName = props.btnNames[0].name;

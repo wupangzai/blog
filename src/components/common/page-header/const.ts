@@ -8,27 +8,27 @@ const defaultBtnsList: DefaultBtnsList[] = [
   {
     name: 'home',
     label: '首页',
-    path: '',
+    path: '/',
   },
   {
     name: 'categories',
     label: '分类',
-    path: '',
+    path: '/todo',
   },
   {
     name: 'label',
     label: '标签',
-    path: '',
+    path: '/todo',
   },
   {
     name: 'file',
     label: '归档',
-    path: '',
+    path: '/todo',
   },
   {
     name: 'knowledge',
     label: '知识库',
-    path: '',
+    path: '/todo',
   },
 ];
 
