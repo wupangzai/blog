@@ -15,6 +15,7 @@ import sideBar from '@/components/common/side-bar/index.vue';
 
 <style lang="less" scoped>
 .page-content {
+  position: relative;
   width: 100%;
   background-color: var(--el-color-info-light-9);
   display: flex;
@@ -29,6 +30,8 @@ import sideBar from '@/components/common/side-bar/index.vue';
   }
 
   .card-content {
+    position: sticky;
+    top: 68px;
     right: 0;
     width: 290px;
     max-width: 290px;
