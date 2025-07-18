@@ -2,6 +2,8 @@ import githubSvg from '@/assets/svg/github.svg';
 import giteeSvg from '@/assets/svg/gitee.svg';
 import zhihuSvg from '@/assets/svg/zhihu.svg';
 import csdnSvg from '@/assets/svg/csdn.svg';
+import categoriesSvg from '@/assets/svg/categories.svg';
+import labelSvg from '@/assets/svg/label.svg';
 
 const linksMap = [
   {
@@ -29,4 +31,19 @@ const keyToLabelMap = {
   pvTotalCount: '总访问量',
 };
 
-export { linksMap, keyToLabelMap };
+const tagsCardList = [
+  {
+    type: 'categories',
+    label: '分类',
+    isLabel: false,
+    icon: categoriesSvg,
+  },
+  {
+    type: 'label',
+    label: '标签',
+    isLabel: true,
+    icon: labelSvg,
+  },
+];
+
+export { linksMap, keyToLabelMap, tagsCardList };

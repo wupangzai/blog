@@ -44,7 +44,6 @@ const tagsMapList = computed(() => {
 <style lang="less" scoped>
 .profile-card {
   width: 288px;
-  //   height: 280px;
   padding: 20px 8px;
   background-color: #ffff;
   border-radius: 8px;

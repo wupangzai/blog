@@ -16,7 +16,6 @@ import sideBar from '@/components/common/side-bar/index.vue';
 <style lang="less" scoped>
 .page-content {
   width: 100%;
-  height: calc(100vh - 68px);
   background-color: var(--el-color-info-light-9);
   display: flex;
   justify-content: center;
