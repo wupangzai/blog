@@ -25,7 +25,6 @@ import sideBar from '@/components/common/side-bar/index.vue';
     width: 917px;
     max-width: 917px;
     height: 100%;
-    background-color: aqua;
     margin-right: 28px;
   }
 
