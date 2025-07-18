@@ -4,6 +4,17 @@
     <div class="page-container">
       <list-page-card v-for="pageItem in articleList" :key="pageItem.id" :page-card="pageItem" />
     </div>
+    <div class="pagination">
+      <div class="total">共{{ page.total }}篇文章</div>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.size"
+        @prev-click="getArticleList"
+        @next-click="getArticleList"
+      />
+    </div>
   </div>
 </template>
 
@@ -30,10 +41,17 @@ const page = ref({
 });
 
 const articleList = ref<ArticleType.ArticleItem[]>([]);
-async function getArticleList() {
+async function getArticleList(current = 1) {
+  page.value.current = current;
   const res = await API.Article.getArticleList(page.value);
   if (res) {
     articleList.value = res.data;
+    page.value = {
+      current: res.current,
+      page: res.page,
+      size: res.size,
+      total: res.total,
+    };
   }
 }
 
@@ -53,6 +71,17 @@ onMounted(() => {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .total {
+      color: var(--el-color-info);
+      font-size: 14px;
+      letter-spacing: 3px;
+    }
   }
 }
 </style>

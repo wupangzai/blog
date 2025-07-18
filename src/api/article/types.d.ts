@@ -2,7 +2,9 @@ import { TagsCardType } from '@/api/types';
 
 export interface Page {
   current: number;
+  page: number;
   size: number;
+  total: number;
 }
 
 interface ArticleItem {
@@ -16,10 +18,6 @@ interface ArticleItem {
   title: string;
 }
 
-export interface ArticleList {
-  current: number;
-  page: number;
-  size: number;
-  total: number;
+export interface ArticleList extends Page {
   data: ArticleItem[];
 }
