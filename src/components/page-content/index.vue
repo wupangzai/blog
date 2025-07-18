@@ -29,6 +29,7 @@ import sideBar from '@/components/common/side-bar/index.vue';
   }
 
   .card-content {
+    right: 0;
     width: 290px;
     max-width: 290px;
     height: 100%;

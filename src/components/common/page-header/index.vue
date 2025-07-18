@@ -58,6 +58,7 @@ const switchChecked = ref(false);
   justify-content: center;
   align-items: center;
   height: 68px;
+  z-index: 999;
 
   .content-title {
     font-weight: 600;
