@@ -58,7 +58,7 @@ axiosInstance.interceptors.response.use(
   // 成功响应拦截器
   (response) => {
     // 一般情况下，成功时，我们只关心 response 中返回的 data
-    return response.data;
+    return response.data.data;
   },
 
   // 失败响应拦截器

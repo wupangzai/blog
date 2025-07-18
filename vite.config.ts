@@ -16,9 +16,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: '/todo',
+        target: 'http://116.62.199.48/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        // rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
     },
   },
