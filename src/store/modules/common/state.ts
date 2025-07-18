@@ -2,17 +2,10 @@
 import type { Profile } from '@/api/types';
 
 interface State {
-  number: number;
-  name: string;
-  test: string;
-
   profile: Profile.ProfileDetailData;
 }
 
 const state: State = {
-  number: 1,
-  name: 'dingzhen',
-  test: 'test',
   profile: {
     author: '',
     avatar: '',

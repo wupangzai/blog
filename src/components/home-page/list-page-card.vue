@@ -51,8 +51,6 @@ const footerList = [
     data: props.pageCard.category.name,
   },
 ];
-
-console.log('[ props.pageCard ] >', props.pageCard);
 </script>
 
 <style lang="less" scoped>

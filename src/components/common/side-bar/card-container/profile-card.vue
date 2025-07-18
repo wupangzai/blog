@@ -39,8 +39,6 @@ const tagsMapList = computed(() => {
     };
   });
 });
-
-console.log('[ props.profile ] >', props.profile);
 </script>
 
 <style lang="less" scoped>
