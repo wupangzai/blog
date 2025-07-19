@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/article/:id',
+    name: 'Article',
+    component: () => import('@/components/article/index.vue'),
+  },
 ];
 
 export default routes;

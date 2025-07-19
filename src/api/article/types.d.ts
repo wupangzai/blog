@@ -7,8 +7,8 @@ export interface Page {
   total: number;
 }
 
-interface ArticleItem {
-  id: string;
+export interface ArticleItem {
+  id: number;
   category: TagsCardType.CategoryListItem;
   cover: string;
   createDate: string;
@@ -20,4 +20,26 @@ interface ArticleItem {
 
 export interface ArticleList extends Page {
   data: ArticleItem[];
+}
+
+export interface NextOrPreArticle {
+  articleId: number;
+  articleTitle: string;
+}
+export interface ArticleDetailData {
+  categoryId: number;
+  categoryName: string;
+  content: string; // html
+  createTime: string;
+  nextArticle: NextOrPreArticle;
+  preArticle: NextOrPreArticle;
+  readNum: number;
+  readTime: string;
+  tags: TagsCardType.TagListItem[];
+  title: string;
+  totalWords: number;
+  updateTime: string;
+}
+export interface ArticleDetail {
+  data: ArticleDetailData;
 }

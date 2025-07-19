@@ -2,7 +2,12 @@
   <div class="home-page">
     <notice-board :noticeHtml="noticeHtml" />
     <div class="page-container">
-      <list-page-card v-for="pageItem in articleList" :key="pageItem.id" :page-card="pageItem" />
+      <list-page-card
+        v-for="pageItem in articleList"
+        :key="pageItem.id"
+        :page-card="pageItem"
+        @click="clickPageItem(pageItem.id)"
+      />
     </div>
     <div class="pagination">
       <div class="total">共{{ page.total }}篇文章</div>
@@ -25,6 +30,7 @@ import { onMounted, ref } from 'vue';
 import NoticeBoard from '@/components/common/notice-board/index.vue';
 import type { ArticleType } from '@/api/types';
 import listPageCard from './list-page-card.vue';
+import { useRouter } from 'vue-router';
 
 const noticeHtml = ref('');
 async function getNotice() {
@@ -54,6 +60,11 @@ async function getArticleList(current = 1) {
       total: res.total,
     };
   }
+}
+
+const router = useRouter();
+function clickPageItem(id: number) {
+  router.push({ name: 'Article', params: { id } });
 }
 
 onMounted(() => {

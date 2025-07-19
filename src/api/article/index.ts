@@ -9,3 +9,14 @@ export async function getArticleList(page: ArticleType.Page) {
     console.log(e);
   }
 }
+
+export async function getArticleDetail(id: number) {
+  try {
+    const res = await http.postJson<ArticleType.ArticleDetail>('/api/article/detail', {
+      articleId: id,
+    });
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+}

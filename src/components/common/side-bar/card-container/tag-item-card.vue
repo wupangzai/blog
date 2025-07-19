@@ -1,6 +1,9 @@
 <template>
   <div class="tag-item-card" :class="labelTypeClass">
-    <div class="tag-name">{{ props.item.name }}</div>
+    <div class="tag-name">
+      <span v-if="props.isWithPrefix">#</span>
+      <span>{{ props.item.name }}</span>
+    </div>
     <div v-if="!props.isLabelType" class="tag-count">{{ props.item.articlesTotal }}</div>
   </div>
 </template>
@@ -12,10 +15,12 @@ import type { TagsCardType } from '@/api/types';
 interface Props {
   item: TagsCardType.TagListItem;
   isLabelType: boolean;
+  isWithPrefix?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isLabelType: false,
+  isWithPrefix: false,
 });
 
 const labelTypeClass = computed(() => {
