@@ -9,6 +9,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
+        hide-on-single-page
         :total="page.total"
         :page-size="page.size"
         @prev-click="getArticleList"
