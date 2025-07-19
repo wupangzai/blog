@@ -22,6 +22,7 @@ import API from '@/api';
 import { tagsCardList } from '@/components/common/side-bar/card-container/const';
 import type { CategoryListItem, TagListItem } from '@/api/tags-card/types';
 import type { Profile } from '@/api/types';
+import { useRouter } from 'vue-router';
 
 const { profile } = useStates('commonModule', ['profile']);
 
@@ -55,8 +56,11 @@ function mapTagList(type: string) {
   return type === 'categories' ? categoriesList.value : tagsList.value;
 }
 
+const router = useRouter();
 function listenArrowClick(type: string) {
-  console.log('[ type ] >', type);
+  router.push({
+    path: `/${type}`,
+  });
 }
 
 onMounted(() => {

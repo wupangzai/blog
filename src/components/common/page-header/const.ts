@@ -13,12 +13,12 @@ const defaultBtnsList: DefaultBtnsList[] = [
   {
     name: 'categories',
     label: '分类',
-    path: '/todo',
+    path: '/categories',
   },
   {
     name: 'label',
     label: '标签',
-    path: '/todo',
+    path: '/label',
   },
   {
     name: 'file',

@@ -21,6 +21,7 @@ import sideBar from '@/components/common/side-bar/index.vue';
   display: flex;
   justify-content: center;
   padding: 16px 0 28px 0;
+  min-height: calc(100vh - 68px);
 
   .router-content {
     width: 917px;

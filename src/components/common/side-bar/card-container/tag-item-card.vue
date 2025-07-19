@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-item-card" :class="labelTypeClass">
+  <div class="tag-item-card" :class="labelTypeClass" @click="clickTag">
     <div class="tag-name">
       <span v-if="props.isWithPrefix">#</span>
       <span>{{ props.item.name }}</span>
@@ -14,7 +14,7 @@ import type { TagsCardType } from '@/api/types';
 
 interface Props {
   item: TagsCardType.TagListItem;
-  isLabelType: boolean;
+  isLabelType?: boolean;
   isWithPrefix?: boolean;
 }
 
@@ -26,6 +26,13 @@ const props = withDefaults(defineProps<Props>(), {
 const labelTypeClass = computed(() => {
   return props.isLabelType ? 'is-label-type' : '';
 });
+
+const emits = defineEmits<{
+  (e: 'clickTag', id: number, name: string): void;
+}>();
+function clickTag() {
+  emits('clickTag', props.item.id, props.item.name);
+}
 </script>
 
 <style lang="less" scoped>
@@ -40,8 +47,7 @@ const labelTypeClass = computed(() => {
   cursor: pointer;
 
   .tag-name {
-    color: var(--el-color-info);
-    padding-right: 5px;
+    color: #4c4e4d;
   }
 
   .tag-count {
@@ -50,6 +56,7 @@ const labelTypeClass = computed(() => {
     padding: 2px 5px;
     border-radius: 50%;
     font-weight: 600;
+    margin-left: 7px;
   }
 
   &:hover {

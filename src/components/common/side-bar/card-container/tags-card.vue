@@ -1,5 +1,5 @@
 <template>
-  <div class="tags-card">
+  <div class="tags-card" v-if="isShowCard">
     <div class="header">
       <div class="tag-info">
         <img :src="props.icon" alt="" />
@@ -16,6 +16,7 @@
         :key="item.id"
         :item="item"
         :is-label-type="isLabelType"
+        @click-tag="clickTag"
       />
     </div>
   </div>
@@ -26,6 +27,7 @@ import { ArrowRight } from '@element-plus/icons-vue';
 import tagItemCard from './tag-item-card.vue';
 import type { TagsCardType } from '@/api/types';
 import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 interface Props {
   label: string;
@@ -51,6 +53,17 @@ const emits = defineEmits<{
 function arrowClick() {
   emits('arrowClick', props.type);
 }
+
+const router = useRouter();
+function clickTag(id: number, name: string) {
+  router.push({
+    path: `/${props.type}`,
+    query: { id, name },
+  });
+}
+
+const route = useRoute();
+const isShowCard = computed(() => !(route.path === `/${props.type}`));
 </script>
 
 <style lang="less" scoped>
