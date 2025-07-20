@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div class="home-page" data-aos="fade-up">
     <notice-board :noticeHtml="noticeHtml" />
     <div class="page-container">
       <list-page-card

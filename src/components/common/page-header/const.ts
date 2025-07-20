@@ -26,9 +26,9 @@ const defaultBtnsList: DefaultBtnsList[] = [
     path: '/achieve',
   },
   {
-    name: 'knowledge',
+    name: 'wiki',
     label: '知识库',
-    path: '/todo',
+    path: '/wiki',
   },
 ];
 

@@ -7,3 +7,5 @@ export type * as NoticeType from '@/api/notice-board/types';
 export type * as ArticleType from '@/api/article/types';
 
 export type * as AchieveType from '@/api/achieve/types';
+
+export type * as WikiType from '@/api/wiki/types';

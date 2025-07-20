@@ -1,5 +1,5 @@
 <template>
-  <div class="achieve-container">
+  <div class="achieve-container" data-aos="fade-up">
     <div class="achieve-content" v-for="(achieve, index) in achieveList" :key="index">
       <time class="title">{{ achieve.month }}</time>
       <div class="card-content">

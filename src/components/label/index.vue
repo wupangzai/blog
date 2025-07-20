@@ -1,5 +1,5 @@
 <template>
-  <div class="label-container">
+  <div class="label-container" data-aos="fade-up">
     <div class="label">
       <tags-card :tag-list="tagsList" />
     </div>
