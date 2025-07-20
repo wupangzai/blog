@@ -128,10 +128,10 @@ onUnmounted(() => {
 
 .progress-bar {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  width: 4px;
-  background-color: transparent;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background-color: var(--el-color-info-light-5);
   border-radius: 2px;
   transition:
     background-color 0.3s,
@@ -139,6 +139,10 @@ onUnmounted(() => {
 }
 
 .progress-bar.active {
+  top: 4px;
+  bottom: 4px;
+  left: 4px !important;
+  width: 4px;
   background-color: #3498db;
 }
 </style>
