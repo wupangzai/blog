@@ -5,8 +5,20 @@
       <li
         v-for="item in tocList"
         :key="item.id"
-        :style="{ paddingLeft: `${(item.level - 1) * 16}px`, margin: '6px' }"
+        :style="{
+          paddingLeft: `${(item.level - 1) * 16 + 8}px`,
+          margin: '6px',
+          position: 'relative',
+        }"
       >
+        <!-- 左边进度条 -->
+        <span
+          class="progress-bar"
+          :class="{ active: activeId === item.id }"
+          :style="{ left: `${5}px` }"
+        ></span>
+
+        <!-- 目录链接 -->
         <a
           href="javascript:void(0)"
           :class="{ active: activeId === item.id }"
@@ -112,5 +124,21 @@ onUnmounted(() => {
 .toc-container a.active {
   color: #3498db;
   font-weight: bold;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  background-color: transparent;
+  border-radius: 2px;
+  transition:
+    background-color 0.3s,
+    height 0.3s;
+}
+
+.progress-bar.active {
+  background-color: #3498db;
 }
 </style>
