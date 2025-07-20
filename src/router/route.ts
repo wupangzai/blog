@@ -18,6 +18,10 @@ const routes: RouteRecordRaw[] = [
         path: 'label',
         component: () => import('@/components/label/index.vue'),
       },
+      {
+        path: 'achieve',
+        component: () => import('@/components/achieve/index.vue'),
+      },
     ],
   },
   {

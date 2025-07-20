@@ -5,3 +5,5 @@ export type * as TagsCardType from '@/api/tags-card/types';
 export type * as NoticeType from '@/api/notice-board/types';
 
 export type * as ArticleType from '@/api/article/types';
+
+export type * as AchieveType from '@/api/achieve/types';

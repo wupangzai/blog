@@ -21,9 +21,9 @@ const defaultBtnsList: DefaultBtnsList[] = [
     path: '/label',
   },
   {
-    name: 'file',
+    name: 'achieve',
     label: '归档',
-    path: '/todo',
+    path: '/achieve',
   },
   {
     name: 'knowledge',
