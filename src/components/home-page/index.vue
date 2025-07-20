@@ -9,16 +9,15 @@
         @click="clickPageItem(pageItem.id)"
       />
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="page.total">
       <div class="total">共{{ page.total }}篇文章</div>
       <el-pagination
         background
+        v-model="page.current"
         layout="prev, pager, next"
-        hide-on-single-page
         :total="page.total"
         :page-size="page.size"
-        @prev-click="getArticleList"
-        @next-click="getArticleList"
+        @current-change="(current: number) => getArticleList(current)"
       />
     </div>
   </div>
@@ -44,7 +43,7 @@ const page = ref({
   current: 1,
   page: 1,
   size: 10,
-  total: 6,
+  total: 0,
 });
 
 const articleList = ref<ArticleType.ArticleItem[]>([]);

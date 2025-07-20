@@ -1,15 +1,38 @@
 <template>
-  <div class="categories">
-    <tags-card :tag-list="tagsList" />
+  <div class="categories-container">
+    <div class="categories">
+      <tags-card :tag-list="tagsList" />
+    </div>
+    <div class="categories-list-content" v-if="isShowListContent">
+      <page-article-list-card
+        class="list-card-line"
+        v-for="listItem in categoriesArticleList"
+        :key="listItem.id"
+        :list-item="listItem"
+        @click-card="clickCard"
+      />
+    </div>
+    <div class="pagination" v-if="page.total">
+      <div class="total">共{{ page.total }}篇文章</div>
+      <el-pagination
+        v-model="page.current"
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :page-size="page.size"
+        @current-change="(current: number) => getCategoriesArticleList({ ...page, current })"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import API from '@/api';
 import type { TagsCardType } from '@/api/types';
 import tagsCard from '../common/page-tags-card/index.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import pageArticleListCard from '@/components/common/page-article-list-card/index.vue';
 
 const tagsList = ref<TagsCardType.TagListItem[]>([]);
 async function getCategoriesTagList() {
@@ -19,52 +42,90 @@ async function getCategoriesTagList() {
   }
 }
 
+const categoriesArticleList = ref<TagsCardType.CategoryArticleListItem[]>([]);
+
+const page = ref<TagsCardType.Page>({
+  size: 10,
+  current: 1,
+  id: '',
+  total: 0,
+});
+
+async function getCategoriesArticleList(pageParams: TagsCardType.Page) {
+  const res = await API.tagsCard.getCategoryArticleList(pageParams);
+  if (res) {
+    categoriesArticleList.value = res.data;
+    page.value.current = res.current;
+    page.value.total = res.total;
+  }
+}
+
 const route = useRoute();
+const router = useRouter();
+function clickCard(id: number) {
+  router.push({
+    name: 'Article',
+    params: {
+      id,
+    },
+  });
+}
+
+const isShowListContent = computed(
+  () => categoriesArticleList.value && categoriesArticleList.value.length !== 0
+);
 
 watch(
   () => route.query.id,
   () => {
+    page.value.id = route.query.id as string;
     getCategoriesTagList();
+    getCategoriesArticleList(page.value);
   },
   { immediate: true }
 );
 </script>
 
 <style lang="less" scoped>
+.categories-container {
+  display: flex;
+  flex-direction: column;
+}
 .categories {
   background-color: #fff;
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-7);
   padding: 10px 20px 28px 20px;
-  display: flex;
-  flex-direction: column;
   gap: 12px;
+  margin-bottom: 12px;
+}
 
-  .tag-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    img {
-      width: 20px;
-      height: 20px;
-    }
+.categories-list-content {
+  width: 100%;
+  min-height: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid var(--el-color-info-light-7);
+  padding: 20px;
 
-    .label {
-      font-size: 16px;
-    }
-    .total-categories {
-      color: var(--el-color-info);
+  .list-card-line {
+    border-bottom: 1px solid var(--el-color-info-light-7);
+
+    &:last-child {
+      border-bottom: none;
     }
   }
+}
 
-  .tags-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .foucs-tag-class {
-    background-color: #e0f2fe;
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  .total {
+    color: var(--el-color-info);
+    font-size: 14px;
+    letter-spacing: 3px;
   }
 }
 </style>
