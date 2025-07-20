@@ -2,7 +2,12 @@
   <div class="wiki-container" data-aos="fade-up">
     <notice-board :noticeHtml="noticeHtml" />
     <div class="wiki-list-content">
-      <wiki-card v-for="cardItem in wikiList" :key="cardItem.id" :card-item="cardItem" />
+      <wiki-card
+        v-for="cardItem in wikiList"
+        :key="cardItem.id"
+        :card-item="cardItem"
+        @click-card="clickCard"
+      />
     </div>
   </div>
 </template>
@@ -13,6 +18,7 @@ import NoticeBoard from '@/components/common/notice-board/index.vue';
 import type { WikiType } from '@/api/types';
 import { onMounted, ref } from 'vue';
 import wikiCard from '@/components/common/wiki-card/index.vue';
+import { useRouter } from 'vue-router';
 
 const noticeHtml = ref('');
 async function getNotice() {
@@ -28,13 +34,17 @@ async function getWikiList() {
   const res = await API.Wiki.getWikiList();
   if (res) {
     wikiList.value = res.data;
-    console.log('[ res.data ] >', res.data);
   }
 }
 
+const router = useRouter();
+function clickCard() {
+  // todo
+  router.push({});
+}
+
 onMounted(() => {
-  getNotice();
-  getWikiList();
+  Promise.all([getNotice(), getWikiList()]);
 });
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="wiki-card">
+  <div class="wiki-card" @click="clickCard">
     <div class="cover">
       <img :src="props.cardItem.cover" alt="" />
     </div>
@@ -21,6 +21,14 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const emits = defineEmits<{
+  (e: 'clickCard', id: number): void;
+}>();
+
+function clickCard() {
+  emits('clickCard', props.cardItem.id);
+}
 </script>
 
 <style lang="less" scoped>
