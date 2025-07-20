@@ -20,6 +20,7 @@
 import { ref, nextTick, watch } from 'vue';
 import { defaultBtnsList } from '@/components/common/page-header/const';
 import type { DefaultBtnsList } from '@/components/common/page-header/const';
+import { useRoute } from 'vue-router';
 
 interface Props {
   btnNames?: DefaultBtnsList[];
@@ -68,6 +69,19 @@ function updateSlider() {
 }
 
 watch(currentIndex, () => nextTick(updateSlider), { immediate: true });
+
+const route = useRoute();
+watch(
+  () => route.path,
+  () => {
+    defaultBtnsList.forEach((btn, index) => {
+      if (btn.path === route.path) {
+        currentIndex.value = index;
+        currentActiveName.value = btn.name;
+      }
+    });
+  }
+);
 </script>
 
 <style lang="less" scoped>
