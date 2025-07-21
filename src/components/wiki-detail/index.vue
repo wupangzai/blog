@@ -83,7 +83,6 @@ watch(
     display: flex;
 
     .content-nav {
-      width: 320px;
       border: 1px solid var(--el-color-info-light-9);
       padding: 12px;
     }

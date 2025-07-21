@@ -58,6 +58,6 @@ const props = defineProps<Props>();
 
 <style lang="less" scoped>
 .wiki-nav {
-  width: 320px;
+  width: 250px;
 }
 </style>
