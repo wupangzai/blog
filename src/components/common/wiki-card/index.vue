@@ -23,11 +23,11 @@ interface Props {
 const props = defineProps<Props>();
 
 const emits = defineEmits<{
-  (e: 'clickCard', id: number): void;
+  (e: 'clickCard', id: number, firstArticleId: number): void;
 }>();
 
 function clickCard() {
-  emits('clickCard', props.cardItem.id);
+  emits('clickCard', props.cardItem.id, props.cardItem.firstArticleId);
 }
 </script>
 

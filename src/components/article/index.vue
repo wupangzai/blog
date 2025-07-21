@@ -75,7 +75,7 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-@import './rich-html.css'; /* 或直接复制粘贴样式到 scoped 样式中 */
+@import './rich-html.less'; /* 或直接复制粘贴样式到 scoped 样式中 */
 
 .article {
   width: 100%;

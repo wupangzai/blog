@@ -9,3 +9,13 @@ export async function getWikiList() {
     console.log(e);
   }
 }
+
+// wiki-detial页面，左边的目录接口
+export async function getWikiCatalogList(id: number) {
+  try {
+    const res = await http.postJson<WikiType.WikiCatalogList>('/api/wiki/catalog/list', { id });
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}

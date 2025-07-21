@@ -33,6 +33,11 @@ const routes: RouteRecordRaw[] = [
     name: 'Article',
     component: () => import('@/components/article/index.vue'),
   },
+  {
+    path: '/wiki/:id',
+    name: 'WikiDetail',
+    component: () => import('@/components/wiki-detail/index.vue'),
+  },
 ];
 
 export default routes;

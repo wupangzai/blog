@@ -38,9 +38,16 @@ async function getWikiList() {
 }
 
 const router = useRouter();
-function clickCard() {
-  // todo
-  router.push({});
+function clickCard(id: number, articleId: number) {
+  router.push({
+    name: 'WikiDetail',
+    params: {
+      id,
+    },
+    query: {
+      articleId,
+    },
+  });
 }
 
 onMounted(() => {

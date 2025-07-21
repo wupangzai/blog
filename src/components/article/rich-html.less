@@ -100,3 +100,23 @@
   border: 1px solid #ddd;
   text-align: left;
 }
+
+.article-content {
+  :deep(img) {
+    max-width: 100%;
+  }
+
+  :deep(blockquote) {
+    margin: 1.2em 0;
+    padding: 0.8em 1em;
+    border-left: 2px solid #3498db;
+    background-color: #ecf0f1;
+    color: #333;
+    border-radius: 4px;
+  }
+
+  :deep(a) {
+    color: var(--el-color-primary);
+    text-decoration: none;
+  }
+}
