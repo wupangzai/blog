@@ -12,6 +12,8 @@ import { store, key } from '@/store';
 
 import router from '@/router';
 
+import '@/router/router-guard';
+
 import App from './App.vue';
 
 const app = createApp(App);

@@ -4,7 +4,11 @@
       <img src="@/assets/imgs/avatar.jpg" alt="" />
       <template #dropdown>
         <el-dropdown-menu v-if="props.isShowDropDown">
-          <el-dropdown-item v-for="(action, key) in actionsMapList" :key="key">
+          <el-dropdown-item
+            v-for="(action, key) in actionsMapList"
+            :key="key"
+            @click="clickDropDown(action.key)"
+          >
             <div class="action-item">
               <el-icon><component :is="action.icon" /></el-icon>
               <span>{{ action.label }}</span>
@@ -18,14 +22,17 @@
 
 <script lang="ts" setup>
 import { Monitor, Switch } from '@element-plus/icons-vue';
+import { useRouter } from 'vue-router';
 const actionsMapList = [
   {
     icon: Monitor,
     label: '进入后台',
+    key: 'admin',
   },
   {
     icon: Switch,
     label: '退出登录',
+    key: 'logout',
   },
 ];
 
@@ -36,6 +43,14 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isShowDropDown: false,
 });
+
+const router = useRouter();
+function clickDropDown(key: string) {
+  console.log('[ e ] >', key);
+  if (key === 'admin') {
+    router.push({ name: 'Admin' });
+  }
+}
 </script>
 
 <style lang="less" scoped>

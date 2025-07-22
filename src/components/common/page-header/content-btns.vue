@@ -80,6 +80,9 @@ watch(
         currentActiveName.value = btn.name;
       }
     });
+  },
+  {
+    immediate: true,
   }
 );
 </script>
