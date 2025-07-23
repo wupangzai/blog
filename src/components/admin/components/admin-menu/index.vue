@@ -1,11 +1,9 @@
 <template>
   <div class="admin-menu">
     <el-menu ref="menuRef" :collapse="collapse" class="custom-menu">
-      <el-menu-item>
-        <div class="logo">
-          <img class="logo" :src="menulogo" :key="menulogo" />
-        </div>
-      </el-menu-item>
+      <div class="logo">
+        <img class="logo" :src="menulogo" :key="menulogo" />
+      </div>
       <admin-menu-item
         v-for="(menuListItem, index) in menuList"
         :menu-list-item="menuListItem"
