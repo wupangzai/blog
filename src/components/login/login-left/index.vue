@@ -1,8 +1,10 @@
 <template>
   <div class="login-left">
-    <h2>Weblog 博客登录</h2>
-    <p>一款由 DNF 只玩狂战士，云顶只玩圣源，纯运气玩家 开发的前后端分离博客。</p>
-    <img :src="loginBg" alt="" />
+    <h2 data-aos="fade-right">Weblog 博客登录</h2>
+    <p data-aos="fade-right">
+      一款由 DNF 只玩狂战士，云顶只玩圣源，纯运气玩家 开发的前后端分离博客。
+    </p>
+    <img data-aos="fade-right" :src="loginBg" alt="" />
   </div>
 </template>
 

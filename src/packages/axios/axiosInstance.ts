@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { useCookie } from '@/hooks';
 import { ElNotification } from 'element-plus';
 
 interface Options {
@@ -37,7 +37,7 @@ axiosInstance.interceptors.request.use(
     Object.keys(headers).forEach((header) => {
       config.headers[header] = headers[header];
       if (header === 'Authorization') {
-        // todo
+        config.headers[header] = config.headers[header] || `Bearer ${useCookie('token').get()}`;
       }
     });
     return config;
@@ -58,6 +58,13 @@ axiosInstance.interceptors.response.use(
   // 成功响应拦截器
   (response) => {
     // 一般情况下，成功时，我们只关心 response 中返回的 data
+    if (!response.data.success) {
+      ElNotification({
+        title: 'Error',
+        message: response.data.message,
+        type: 'error',
+      });
+    }
     return response.data;
   },
 

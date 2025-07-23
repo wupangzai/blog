@@ -4,7 +4,7 @@
       <login-left />
     </div>
     <div class="login-form-container">
-      <login-right />
+      <login-right data-aos="fade-left" />
     </div>
   </div>
 </template>
@@ -19,6 +19,7 @@ import loginRight from '@/components/login/login-right/index.vue';
   width: 100%;
   height: 100vh;
   display: flex;
+  overflow: hidden;
 
   .login-left-container {
     flex: 0.58;
