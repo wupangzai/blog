@@ -52,9 +52,10 @@ defineExpose({
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 6px 0;
 
   img {
-    width: auto;
+    width: initial;
     height: 60px;
   }
 }
