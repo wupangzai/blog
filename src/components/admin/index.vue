@@ -1,6 +1,6 @@
 <template>
   <div class="admin">
-    <admin-menu ref="adminMenuRef" />
+    <admin-menu class="admin-menu-layout" ref="adminMenuRef" />
     <el-button @click="fn">click</el-button>
   </div>
 </template>
@@ -22,5 +22,13 @@ function fn() {
 .admin {
   width: 100%;
   display: flex;
+  position: relative;
+
+  :deep(.admin-menu-layout) {
+    position: sticky;
+    left: 0;
+    top: 0;
+    height: 100vh;
+  }
 }
 </style>

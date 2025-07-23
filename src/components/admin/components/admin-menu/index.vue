@@ -1,17 +1,15 @@
 <template>
-  <div class="admin-menu">
-    <el-menu ref="menuRef" :collapse="collapse" class="custom-menu">
-      <div class="logo">
-        <img class="logo" :src="menulogo" :key="menulogo" />
-      </div>
-      <admin-menu-item
-        v-for="(menuListItem, index) in menuList"
-        :menu-list-item="menuListItem"
-        :key="index"
-        @update-active-index="updateActiveIndex"
-      />
-    </el-menu>
-  </div>
+  <el-menu ref="menuRef" :collapse="collapse" class="custom-menu">
+    <div class="logo">
+      <img class="logo" :src="menulogo" :key="menulogo" />
+    </div>
+    <admin-menu-item
+      v-for="(menuListItem, index) in menuList"
+      :menu-list-item="menuListItem"
+      :key="index"
+      @update-active-index="updateActiveIndex"
+    />
+  </el-menu>
 </template>
 
 <script lang="ts" setup>
