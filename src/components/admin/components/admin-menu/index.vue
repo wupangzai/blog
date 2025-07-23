@@ -1,9 +1,11 @@
 <template>
   <div class="admin-menu">
-    <div class="logo">
-      <img :src="menulogo" />
-    </div>
     <el-menu ref="menuRef" :collapse="collapse" class="custom-menu">
+      <el-menu-item>
+        <div class="logo">
+          <img class="logo" :src="menulogo" :key="menulogo" />
+        </div>
+      </el-menu-item>
       <admin-menu-item
         v-for="(menuListItem, index) in menuList"
         :menu-list-item="menuListItem"
@@ -49,14 +51,15 @@ defineExpose({
 
 <style lang="less" scoped>
 .logo {
+  width: 100%;
   background-color: #1e293b;
   display: flex;
-  padding: 3px 0;
+  justify-content: center;
+  align-items: center;
 
   img {
+    width: auto;
     height: 60px;
-    margin: auto;
-    transition: all 3s ease;
   }
 }
 
