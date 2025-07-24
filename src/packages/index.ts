@@ -2,6 +2,7 @@ import ElementUI from './element-plus';
 import http from '@/packages/axios';
 import AOS from '@/packages/aos';
 import type { App } from 'vue';
+import VueECharts from '@/packages/vue-charts';
 
 const packagesList = [ElementUI, http];
 
@@ -15,5 +16,7 @@ export default {
     AOS.init({
       duration: 1200,
     });
+
+    app.component('VChart', VueECharts);
   },
 };

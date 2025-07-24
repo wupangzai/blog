@@ -6,3 +6,17 @@ export const defaultDashboardStatistics = () => {
     tagTotalCount: 0,
   };
 };
+
+export const defaultDashboardPvStatistics = () => {
+  return {
+    pvCounts: [],
+    pvDates: [],
+  };
+};
+
+export const defaultDashboardTagStatistics = () => {
+  return {
+    articleCounts: [],
+    tagNames: [],
+  };
+};
