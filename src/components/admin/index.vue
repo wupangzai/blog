@@ -23,12 +23,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import adminMenu from '@/components/admin/components/admin-menu/index.vue';
 import adminTopBar from '@/components/admin/components/admin-top-bar/index.vue';
 import topBarIcon from './components/admin-top-bar/top-bar-icon.vue';
 import topBarActionBtns from '@/components/admin/components/admin-top-bar/top-bar-action-btns.vue';
 import adminBreadCrumb from '@/components/admin/components/admin-bread-crumb/index.vue';
+import { useActions } from '@/hooks';
 
 const adminMenuRef = ref<InstanceType<typeof adminMenu> | null>(null);
 function updateCollapse() {
@@ -36,6 +37,14 @@ function updateCollapse() {
     adminMenuRef.value.changeCollapse();
   }
 }
+
+const { 'commonModule/GETADMINUSERINFO_ACTION': getAdminUserInfo } = useActions([
+  'commonModule/GETADMINUSERINFO_ACTION',
+]);
+
+onMounted(() => {
+  getAdminUserInfo();
+});
 </script>
 
 <style lang="less" scoped>

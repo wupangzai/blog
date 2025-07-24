@@ -13,3 +13,5 @@ export type * as WikiType from '@/api/wiki/types';
 export type * as LoginType from '@/api/login/types';
 
 export type * as AdminDashBoardType from '@/api/admin-dash-board/types';
+
+export type * as AdminUserType from '@/api/admin-user/types';

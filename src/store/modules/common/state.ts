@@ -1,8 +1,9 @@
 // State 类型
-import type { Profile } from '@/api/types';
+import type { Profile, AdminUserType } from '@/api/types';
 
 interface State {
   profile: Profile.ProfileDetailData;
+  adminUserInfo: AdminUserType.AdminUserInfo;
 }
 
 const state: State = {
@@ -16,6 +17,9 @@ const state: State = {
     logo: '',
     name: '',
     zhihuHomepage: '',
+  },
+  adminUserInfo: {
+    username: '',
   },
 };
 

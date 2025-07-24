@@ -1,1 +1,3 @@
 export const SET_PROFILE = 'SET_PROFILE';
+
+export const SET_ADMIN_USERINFO = 'SET_ADMIN_USERINFO';

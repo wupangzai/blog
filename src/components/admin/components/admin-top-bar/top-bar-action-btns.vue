@@ -10,7 +10,7 @@
     <el-dropdown placement="bottom">
       <div class="user-info">
         <img :src="profile.avatar" alt="" />
-        <div>{{ profile.author }}</div>
+        <div>{{ adminUserInfo.username }}</div>
         <el-icon>
           <arrow-down />
         </el-icon>
@@ -37,7 +37,7 @@ import { useCookie, useStates } from '@/hooks';
 import { useRouter } from 'vue-router';
 import { useFullscreen } from '@/hooks';
 
-const { profile } = useStates('commonModule', ['profile']);
+const { adminUserInfo, profile } = useStates('commonModule', ['adminUserInfo', 'profile']);
 
 const btnMapList = [
   {
