@@ -65,6 +65,16 @@ const routes: RouteRecordRaw[] = [
     meta: {
       requireAuth: true,
     },
+    children: [
+      {
+        path: 'article',
+        name: 'AdminArticle',
+        component: () => import('@/components/wiki/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
+    ],
   },
 ];
 

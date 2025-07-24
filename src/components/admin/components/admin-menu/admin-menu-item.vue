@@ -24,6 +24,7 @@ import adminMenuItem from '@/components/admin/components/admin-menu/admin-menu-i
 import type { MenuListItem } from '@/components/admin/components/admin-menu/const';
 import menuIcon from './menu-icon.vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useAdminBreadCrumb } from '@/hooks';
 
 interface Props {
   menuListItem: MenuListItem;
@@ -33,8 +34,17 @@ const props = defineProps<Props>();
 
 const isMenuItem = computed(() => !props.menuListItem.children);
 
+const route = useRoute();
 const router = useRouter();
 function clickMenuItem() {
+  const adminBreadCrumb = useAdminBreadCrumb();
+  const isAddToBreadCrumb = adminBreadCrumb.value.find(
+    (item) => item.name === props.menuListItem.name
+  );
+  if (!isAddToBreadCrumb) {
+    adminBreadCrumb.value = [...adminBreadCrumb.value, { ...props.menuListItem }];
+  }
+
   router.push({
     name: props.menuListItem.name,
   });
@@ -44,7 +54,6 @@ const emits = defineEmits<{
   (e: 'updateActiveIndex', index: string): void;
 }>();
 
-const route = useRoute();
 watch(
   () => route.name,
   () => {
