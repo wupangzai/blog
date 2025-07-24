@@ -1,17 +1,22 @@
 <template>
   <div class="admin">
     <admin-menu class="admin-menu-layout" ref="adminMenuRef" />
-    <el-button @click="fn">click</el-button>
+    <admin-top-bar :collapse="adminMenuRef?.collapse" @update-collapse="updateCollapse">
+      <template #action-btns>
+        <top-bar-action-btns />
+      </template>
+    </admin-top-bar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import adminMenu from '@/components/admin/components/admin-menu/index.vue';
 import { ref } from 'vue';
+import adminMenu from '@/components/admin/components/admin-menu/index.vue';
+import adminTopBar from '@/components/admin/components/admin-top-bar/index.vue';
+import topBarActionBtns from './components/admin-top-bar/top-bar-action-btns.vue';
 
 const adminMenuRef = ref<InstanceType<typeof adminMenu> | null>(null);
-
-function fn() {
+function updateCollapse() {
   if (adminMenuRef.value) {
     adminMenuRef.value.changeCollapse();
   }

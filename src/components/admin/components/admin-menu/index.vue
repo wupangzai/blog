@@ -1,7 +1,7 @@
 <template>
   <el-menu ref="menuRef" :collapse="collapse" class="custom-menu">
     <div class="logo">
-      <img class="logo" :src="menulogo" :key="menulogo" />
+      <img class="logo" :src="menulogo" />
     </div>
     <admin-menu-item
       v-for="(menuListItem, index) in menuList"
@@ -41,6 +41,7 @@ function changeCollapse() {
 const menulogo = computed(() => (collapse.value ? menuLogoShrink : menuLogo));
 
 defineExpose({
+  collapse,
   changeCollapse,
 });
 </script>

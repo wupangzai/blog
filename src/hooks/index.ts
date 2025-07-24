@@ -5,3 +5,5 @@ export { useStates, useGetters, useMutations, useActions } from '@/hooks/store-h
 export { useCookie } from '@/hooks/cookies-hooks';
 
 export * as Rule from '@/hooks/form-hooks';
+
+export { useFullscreen } from '@/hooks/fullScreen-hooks';
