@@ -1,16 +1,21 @@
 <template>
   <div class="admin">
     <admin-menu class="admin-menu-layout" ref="adminMenuRef" />
-    <div class="admin-content">
-      <admin-top-bar :collapse="adminMenuRef?.collapse">
-        <template #icon>
-          <top-bar-icon :collapse="adminMenuRef?.collapse" @update-collapse="updateCollapse" />
-        </template>
-        <template #action-btns>
-          <top-bar-action-btns />
-        </template>
-      </admin-top-bar>
-      <admin-bread-crumb />
+    <div class="admin-right-container">
+      <div class="admin-tools">
+        <admin-top-bar :collapse="adminMenuRef?.collapse">
+          <template #icon>
+            <top-bar-icon :collapse="adminMenuRef?.collapse" @update-collapse="updateCollapse" />
+          </template>
+          <template #action-btns>
+            <top-bar-action-btns />
+          </template>
+        </admin-top-bar>
+        <admin-bread-crumb />
+      </div>
+      <keep-alive>
+        <router-view class="router-view" />
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -37,8 +42,22 @@ function updateCollapse() {
   display: flex;
   position: relative;
 
-  .admin-content {
+  .admin-right-container {
     flex: 1;
+
+    .admin-tools {
+      background-color: #fff;
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
+  }
+
+  .router-view {
+    padding: 36px;
+    min-height: 100vh;
+    background-color: #f4f4f4;
   }
 
   :deep(.admin-menu-layout) {

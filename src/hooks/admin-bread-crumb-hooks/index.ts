@@ -6,7 +6,7 @@ interface AdminBreadCrumbItem {
   name: string;
 }
 
-const defaultRouteName = 'Admin';
+const defaultRouteName = 'AdminDashBoard';
 const defaultCrumb = MenuList.find((item) => item.name === defaultRouteName)!;
 
 let initialized = false;

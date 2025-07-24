@@ -25,11 +25,12 @@ const currentRouteName = ref(defaultRouteName);
 <style lang="less" scoped>
 .admin-bread-crumb {
   width: 100%;
-  border: 1px solid #ccc;
   height: 44px;
   display: flex;
   align-items: center;
   padding: 0 8px;
   gap: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 </style>

@@ -67,9 +67,17 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
+        path: '',
+        name: 'AdminDashBoard',
+        component: () => import('@/components/admin/components/admin-dash-board/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
+      {
         path: 'article',
         name: 'AdminArticle',
-        component: () => import('@/components/wiki/index.vue'),
+        component: () => import('@/components/home-page/index.vue'),
         meta: {
           requireAuth: true,
         },

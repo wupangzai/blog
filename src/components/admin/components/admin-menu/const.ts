@@ -20,7 +20,7 @@ export const iconMap = {
 };
 
 export const MenuList: MenuListItem[] = [
-  { label: '仪表盘', name: 'Admin', icon: 'Monitor' },
+  { label: '仪表盘', name: 'AdminDashBoard', icon: 'Monitor' },
   { label: '文章管理', name: 'AdminArticle', icon: 'Document' },
   { label: '分类管理', name: 'AdminCategory', icon: 'FolderOpened' },
   { label: '标签管理', name: 'AdminTag', icon: 'Discount' },
