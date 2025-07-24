@@ -1,7 +1,7 @@
 <template>
   <div class="admin-bread-crumb-item" :class="[{ active: isActiveRoute }]" @click="clickBreadCrumb">
     {{ props.adminBreadCrumbItem.label }}
-    <el-icon class="hover-icon">
+    <el-icon class="hover-icon" v-if="isShowClose" @click="removeBreadCrumbItem">
       <Close />
     </el-icon>
   </div>
@@ -27,6 +27,16 @@ const router = useRouter();
 function clickBreadCrumb() {
   modelValue.value = props.adminBreadCrumbItem.name;
   router.push({ name: props.adminBreadCrumbItem.name });
+}
+
+const isShowClose = computed(() => props.adminBreadCrumbItem.name !== 'AdminDashBoard');
+
+const emits = defineEmits<{
+  (e: 'removeBreadCrumbItem', routeName: string): void;
+}>();
+function removeBreadCrumbItem(e: Event) {
+  e.stopPropagation();
+  emits('removeBreadCrumbItem', props.adminBreadCrumbItem.name);
 }
 
 const route = useRoute();

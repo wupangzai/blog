@@ -281,12 +281,6 @@ onMounted(() => {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    .heat-chart {
-      :deep(canvas) {
-        // left: calc(-20px) !important;
-      }
-    }
-
     .charts {
       width: 49%;
       display: flex;

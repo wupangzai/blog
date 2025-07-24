@@ -5,6 +5,7 @@
       :key="item.name"
       :admin-bread-crumb-item="item"
       v-model="currentRouteName"
+      @remove-bread-crumb-item="removeBreadCrumbItem"
     />
   </div>
 </template>
@@ -20,6 +21,10 @@ const adminBreadCrumb = useAdminBreadCrumb();
 const route = useRoute();
 const defaultRouteName = route.name as string;
 const currentRouteName = ref(defaultRouteName);
+
+function removeBreadCrumbItem(routeName: string) {
+  adminBreadCrumb.value = adminBreadCrumb.value.filter((item) => item.name !== routeName);
+}
 </script>
 
 <style lang="less" scoped>
