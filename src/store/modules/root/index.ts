@@ -9,10 +9,10 @@ import { Mutations_Const } from '@/store/modules/root/const';
 /**
  * root 模块不会有很多数据，故不拆分成单一文件，优先使用commonModule
  */
-const rootState = {
+const rootState: RootState = {
   version: 'v2.0.0',
   adminToken: '',
-} as RootState;
+};
 
 const gettersInRoot: GettersInRoot = {};
 

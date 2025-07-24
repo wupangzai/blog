@@ -33,6 +33,10 @@ const route = useRoute();
 watch(
   () => route.name,
   () => {
+    if (route.name === 'Admin') {
+      modelValue.value = 'AdminDashBoard';
+      return;
+    }
     modelValue.value = route.name;
   },
   { immediate: true }

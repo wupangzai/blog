@@ -13,9 +13,11 @@
         </admin-top-bar>
         <admin-bread-crumb />
       </div>
-      <keep-alive>
-        <router-view class="router-view" />
-      </keep-alive>
+      <router-view v-slot="{ Component }" class="router-view">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
 </template>
@@ -50,7 +52,6 @@ function updateCollapse() {
       position: sticky;
       top: 0;
       left: 0;
-      z-index: 9999;
     }
   }
 

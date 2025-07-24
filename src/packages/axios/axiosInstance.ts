@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useCookie } from '@/hooks';
 import { ElNotification } from 'element-plus';
+import router from '@/router';
 
 interface Options {
   configApi: string;
@@ -37,7 +38,8 @@ axiosInstance.interceptors.request.use(
     Object.keys(headers).forEach((header) => {
       config.headers[header] = headers[header];
       if (header === 'Authorization') {
-        config.headers[header] = config.headers[header] || `Bearer ${useCookie('token').get()}`;
+        config.headers[header] =
+          config.headers[header] || `Bearer ${useCookie('Authorization').get()}`;
       }
     });
     return config;
@@ -71,6 +73,8 @@ axiosInstance.interceptors.response.use(
   // 失败响应拦截器
   async (error) => {
     if (error.response?.status === 401) {
+      router.replace('/login');
+
       // 失败时，默认抛出错误信息， todo: data -> amagi 配置的字段
       ElNotification({
         title: 'Error',

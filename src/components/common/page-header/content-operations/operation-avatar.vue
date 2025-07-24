@@ -46,9 +46,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter();
 function clickDropDown(key: string) {
-  console.log('[ e ] >', key);
   if (key === 'admin') {
-    router.push({ name: 'Admin' });
+    router.push({ name: 'AdminDashBoard' });
   }
 }
 </script>
