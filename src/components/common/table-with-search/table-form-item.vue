@@ -2,14 +2,8 @@
   <el-form-item class="table-form-item">
     <div class="form-item-content">
       <span class="label">{{ props.tableFormItem.label }}</span>
-      <el-input
-        v-if="getFormItemComponentType('input')"
-        v-model="modelValue"
-        v-bind="{ ...props.tableFormItem }"
-      />
-
-      <el-date-picker
-        v-if="getFormItemComponentType('date-picker')"
+      <component
+        :is="getFormItemComponentType"
         v-model="modelValue"
         v-bind="{ ...props.tableFormItem }"
       />
@@ -19,6 +13,9 @@
 
 <script lang="ts" setup>
 import type { SearchListItem } from '@/components/common/table-with-search/const';
+import { ElInput, ElDatePicker } from 'element-plus';
+
+import { computed } from 'vue';
 
 interface Props {
   tableFormItem: SearchListItem;
@@ -26,11 +23,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-function getFormItemComponentType(key: string) {
-  return props.tableFormItem.componentKey === key;
-}
-
 const modelValue = defineModel<SearchListItem['value']>();
+
+const getFormItemComponentType = computed(() => {
+  switch (props.tableFormItem.componentKey) {
+    case 'input':
+      return ElInput;
+    case 'date-picker':
+      return ElDatePicker;
+    default:
+      return void 0;
+  }
+});
 </script>
 
 <style lang="less" scoped>
