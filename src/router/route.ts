@@ -77,7 +77,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'article',
         name: 'AdminArticle',
-        component: () => import('@/components/home-page/index.vue'),
+        component: () => import('@/components/admin/components/admin-article/index.vue'),
         meta: {
           requireAuth: true,
         },
