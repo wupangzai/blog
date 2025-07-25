@@ -58,6 +58,7 @@ onMounted(() => {
 
     .admin-tools {
       background-color: #fff;
+      z-index: 99;
       position: sticky;
       top: 0;
       left: 0;

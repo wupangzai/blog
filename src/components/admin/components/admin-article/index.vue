@@ -10,20 +10,21 @@ import { ref } from 'vue';
 
 const searchList = ref([
   {
-    key: 'articleTitle',
+    prop: 'articleTitle',
     label: '文章标题',
     componentKey: 'input',
     value: '',
   },
   {
-    key: 'createTime',
+    prop: 'createTime',
     label: '创建时间',
     componentKey: 'date-picker',
-    value: '',
+    value: [],
     type: 'daterange',
     rangeSeparator: '至',
     startPlaceholder: '开始时间',
     endPlaceholder: '结束时间',
+    default: [null, null],
   },
 ]);
 </script>

@@ -5,13 +5,13 @@
         <table-form-item
           v-for="tableFormItem in modelValue"
           v-model="tableFormItem.value"
-          :key="tableFormItem.key"
+          :key="tableFormItem.prop"
           :table-form-item="tableFormItem"
         />
       </el-form>
       <div class="btn-group">
-        <el-button type="primary" :icon="Search">搜索</el-button>
-        <el-button :icon="RefreshRight">重置</el-button>
+        <el-button type="primary" :icon="Search" @click="search">搜索</el-button>
+        <el-button :icon="RefreshRight" @click="reset">重置</el-button>
       </div>
     </div>
     <div class="table-content"></div>
@@ -23,7 +23,19 @@ import type { SearchListItem } from '@/components/common/table-with-search/const
 import tableFormItem from './table-form-item.vue';
 import { Search, RefreshRight } from '@element-plus/icons-vue';
 
-const modelValue = defineModel<SearchListItem[]>();
+const modelValue = defineModel<SearchListItem[]>({ default: () => [] });
+
+const emits = defineEmits<{
+  (e: 'search'): void;
+}>();
+function search() {
+  emits('search');
+}
+function reset() {
+  modelValue.value.forEach((item) => {
+    item.value = item.default || '';
+  });
+}
 </script>
 
 <style lang="less" scoped>
