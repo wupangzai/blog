@@ -76,7 +76,6 @@ axiosInstance.interceptors.response.use(
   // 失败响应拦截器
   async (error) => {
     if (error.response?.status === 401) {
-      console.log('[ 1 ] >', 1);
       useCookie('Authorization').remove();
 
       router.replace('/login');
