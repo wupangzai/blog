@@ -40,21 +40,21 @@ export function createDialog(options: Options): Promise<CloseType> {
     document.body.removeChild(container); // 删除容器
   };
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     // Dialog 的关闭逻辑
-    const onClose = (type: CloseType) => {
-      resolve(type);
+    const onClose = (type: CloseType, resolveValue: any) => {
+      type === 'confirm' ? resolve(resolveValue) : reject(type);
       closeDialog();
     };
 
     const vnode = createVNode(
-      createVNode(customDialog, { ...options.dialogProps }),
+      customDialog,
       {
+        ...options.dialogProps,
         visible: true,
         onClose,
-        'onUpdate:visible': (visible: boolean, type: CloseType) => {
-          visible = !visible;
-          onClose(type);
+        'onUpdate:visible': (type: CloseType, resolveValue: any) => {
+          onClose(type, resolveValue);
         },
       },
       {
@@ -64,10 +64,9 @@ export function createDialog(options: Options): Promise<CloseType> {
             ? h('div', options.content)
             : h(options.content as ReturnType<typeof defineComponent>, {
                 ...options.slotProps,
-                'onUpdate:visible': (visible: boolean, type: CloseType) => {
+                'onUpdate:visible': (type: CloseType, resolveValue: any) => {
                   // 赋予关闭弹窗的能力
-                  visible = !visible;
-                  onClose(type);
+                  onClose(type, resolveValue);
                 },
               }),
       }

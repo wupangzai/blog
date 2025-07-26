@@ -32,11 +32,13 @@ export function useRule<T>(initialValue: T, isRequired = true) {
     visible: true,
     errMsg: '',
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validate(changeMes = true): boolean {
       // 提供重写覆盖，默认清除错误，验证通过
 
-      if (changeMes) {
-        this.errMsg = '';
+      if (!this.value) {
+        this.errMsg = '请根据提示正确输入内容，且不为空';
+        return false;
       }
       return true;
     },

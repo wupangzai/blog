@@ -3,9 +3,9 @@
   <div>
     <!-- eslint-disable-next-line vue/no-mutating-props -->
     <el-dialog v-model="props.visible" v-bind="{ ...props }">
-      <template #header>
+      <!-- <template #header>
         <span class="custom-header">{{ props.title }}</span>
-      </template>
+      </template> -->
       <slot></slot>
       <template #footer v-if="props.footer">
         <div class="dialog-footer" v-if="props.footer">
@@ -31,7 +31,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'update:visible', value: boolean, type: CloseType): void;
+  (e: 'update:visible', value: boolean, type: CloseType, resolveValue?: any): void;
 }>();
 
 function handleClose(type: CloseType) {
@@ -41,6 +41,6 @@ function handleClose(type: CloseType) {
 
 <style lang="less" scoped>
 .custom-header {
-  color: var(--el-color-info);
+  color: inherit;
 }
 </style>

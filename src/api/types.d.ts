@@ -1,3 +1,5 @@
+export type * as CommonType from '@/api/common';
+
 export type * as Profile from '@/api/profile/types';
 
 export type * as TagsCardType from '@/api/tags-card/types';
@@ -17,3 +19,5 @@ export type * as AdminDashBoardType from '@/api/admin-dash-board/types';
 export type * as AdminUserType from '@/api/admin-user/types';
 
 export type * as AdminArticleType from '@/api/admin-article/types';
+
+export type * as AdminCategoryType from '@/api/admin-category/types';

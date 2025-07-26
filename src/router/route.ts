@@ -82,6 +82,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'category',
+        name: 'AdminCategory',
+        component: () => import('@/components/admin/components/admin-category/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];

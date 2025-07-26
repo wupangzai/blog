@@ -146,8 +146,8 @@ async function operateTableActions(actionType: string, id: number, toggleOption 
   }
 
   if (actionType === 'delete') {
-    const res = (await API.AdminArticle.deleteArticle(id))?.data;
-    if (res) {
+    const success = (await API.AdminArticle.deleteArticle(id))?.success;
+    if (success) {
       ElNotification({
         message: '删除成功',
         type: 'success',
@@ -156,20 +156,20 @@ async function operateTableActions(actionType: string, id: number, toggleOption 
   }
 
   if (actionType === 'isTop') {
-    const res = (await API.AdminArticle.toggleIsTop(id, toggleOption))?.data;
-    if (res) {
+    const success = (await API.AdminArticle.toggleIsTop(id, toggleOption))?.success;
+    if (success) {
       ElNotification({
-        message: '置顶成功',
+        message: '修改成功',
         type: 'success',
       });
     }
   }
 
   if (actionType === 'isPublish') {
-    const res = (await API.AdminArticle.toggleIsPublish(id, toggleOption))?.data;
-    if (res) {
+    const success = (await API.AdminArticle.toggleIsPublish(id, toggleOption))?.success;
+    if (success) {
       ElNotification({
-        message: '发表成功',
+        message: '修改成功',
         type: 'success',
       });
     }

@@ -1,10 +1,4 @@
-export interface AdminArticleListPage {
-  current: number;
-  size: number;
-
-  [key: string]: any;
-}
-
+import { CommonType } from '@/api/types';
 export interface AdminArticleListItem {
   id: number;
   title: string;
@@ -14,17 +8,16 @@ export interface AdminArticleListItem {
   isTop: boolean;
 }
 
-export interface AdminArticleListApi {
+export interface AdminArticleListApi extends CommonType.extraAttributeInPageListApi {
   data: AdminArticleListItem[];
-  total: number;
-  pages: number;
-  size: number;
 }
 
 export interface DeleteArticleApi {
   data: any;
+  success: boolean;
 }
 
 export interface ToggleArticleOptionsApi {
   data: any;
+  success: boolean;
 }

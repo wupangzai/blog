@@ -18,7 +18,7 @@
       <div>
         <slot name="table-header"></slot>
       </div>
-      <el-table :data="props.tableData" class="table-class" border>
+      <el-table :data="props.tableData" class="table-class" border stripe>
         <el-table-column
           v-for="tableItem in props.tableColumn"
           v-bind="{ ...tableItem }"

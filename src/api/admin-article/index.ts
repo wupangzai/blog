@@ -1,7 +1,7 @@
 import { http } from '@/packages/axios/common';
-import type { AdminArticleType } from '@/api/types';
+import type { AdminArticleType, CommonType } from '@/api/types';
 
-export async function getAdminArticleList(pages: AdminArticleType.AdminArticleListPage) {
+export async function getAdminArticleList(pages: CommonType.Page) {
   try {
     const res = await http.postJson<AdminArticleType.AdminArticleListApi>(
       '/api/admin/article/list',
