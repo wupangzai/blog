@@ -61,11 +61,14 @@ axiosInstance.interceptors.response.use(
   (response) => {
     // 一般情况下，成功时，我们只关心 response 中返回的 data
     if (!response.data.success) {
+      // token失效success返回false， 以下兼容blog项目，正常放在失败拦截器
       ElNotification({
         title: 'Error',
         message: response.data.message,
         type: 'error',
       });
+      useCookie('Authorization').remove();
+      router.replace('/login');
     }
     return response.data;
   },
@@ -73,12 +76,15 @@ axiosInstance.interceptors.response.use(
   // 失败响应拦截器
   async (error) => {
     if (error.response?.status === 401) {
+      console.log('[ 1 ] >', 1);
+      useCookie('Authorization').remove();
+
       router.replace('/login');
 
       // 失败时，默认抛出错误信息， todo: data -> amagi 配置的字段
       ElNotification({
         title: 'Error',
-        message: error.response.data,
+        message: error.response.data.message,
         type: 'error',
       });
     }

@@ -52,9 +52,13 @@ onMounted(() => {
   width: 100%;
   display: flex;
   position: relative;
+  height: 100vh;
 
   .admin-right-container {
     flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
 
     .admin-tools {
       background-color: #fff;
@@ -66,9 +70,10 @@ onMounted(() => {
   }
 
   .router-view {
+    flex: 1;
     padding: 36px;
-    min-height: 100vh;
     background-color: #f4f4f4;
+    overflow: auto;
   }
 
   :deep(.admin-menu-layout) {

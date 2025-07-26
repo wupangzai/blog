@@ -7,6 +7,7 @@ import * as Wiki from '@/api/wiki';
 import * as Login from '@/api/login';
 import * as AdminDashBoard from '@/api/admin-dash-board';
 import * as AdminUser from '@/api/admin-user';
+import * as AdminArticle from '@/api/admin-article';
 
 export default class API {
   // front
@@ -21,4 +22,5 @@ export default class API {
   static Login = Login;
   static AdminUser = AdminUser;
   static AdminDashBoard = AdminDashBoard;
+  static AdminArticle = AdminArticle;
 }

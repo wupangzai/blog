@@ -15,3 +15,5 @@ export type * as LoginType from '@/api/login/types';
 export type * as AdminDashBoardType from '@/api/admin-dash-board/types';
 
 export type * as AdminUserType from '@/api/admin-user/types';
+
+export type * as AdminArticleType from '@/api/admin-article/types';
