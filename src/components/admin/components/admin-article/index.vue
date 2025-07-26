@@ -2,6 +2,7 @@
   <div class="admin-aricle">
     <table-with-search
       class="table-class"
+      ref="tableRef"
       v-model="searchList"
       @search="getAdminArticleList"
       :table-data="adminArticleList"
@@ -22,6 +23,7 @@
           inline-prompt
           :active-icon="Check"
           :inactive-icon="Close"
+          @change="(value: boolean) => operateTableActions(column.property, row.id, value)"
         />
 
         <el-switch
@@ -30,6 +32,7 @@
           inline-prompt
           :active-icon="Check"
           :inactive-icon="Close"
+          @change="(value: boolean) => operateTableActions(column.property, row.id, value)"
         />
 
         <div class="table-operations" v-if="column.property === 'operations'">
@@ -37,7 +40,7 @@
             v-for="(iconItem, index) in tableActionList"
             :key="index"
             :icon="iconItem.icon"
-            @click="iconItem.callback"
+            @click="iconItem.callback(iconItem.icon, row.id)"
           />
         </div>
       </template>
@@ -53,6 +56,8 @@ import { ref } from 'vue';
 import { Close, Check, EditPen } from '@element-plus/icons-vue';
 import circleIcon from './circle-icon.vue';
 import dayjs from 'dayjs';
+import { useRouter } from 'vue-router';
+import { ElNotification } from 'element-plus';
 
 const searchList = ref([
   {
@@ -111,17 +116,67 @@ const tableColumn = ref([
 const tableActionList = ref([
   {
     icon: 'edit',
-    callback: () => {},
+    callback: operateTableActions,
   },
   {
     icon: 'view',
-    callback: () => {},
+    callback: operateTableActions,
   },
   {
     icon: 'delete',
-    callback: () => {},
+    callback: operateTableActions,
   },
 ]);
+
+const router = useRouter();
+const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
+async function operateTableActions(actionType: string, id: number, toggleOption = true) {
+  if (actionType === 'edit') {
+    // todo
+    return;
+  }
+  if (actionType === 'view') {
+    router.push({
+      name: 'Article',
+      params: {
+        id,
+      },
+    });
+    return;
+  }
+
+  if (actionType === 'delete') {
+    const res = (await API.AdminArticle.deleteArticle(id))?.data;
+    if (res) {
+      ElNotification({
+        message: '删除成功',
+        type: 'success',
+      });
+    }
+  }
+
+  if (actionType === 'isTop') {
+    const res = (await API.AdminArticle.toggleIsTop(id, toggleOption))?.data;
+    if (res) {
+      ElNotification({
+        message: '置顶成功',
+        type: 'success',
+      });
+    }
+  }
+
+  if (actionType === 'isPublish') {
+    const res = (await API.AdminArticle.toggleIsPublish(id, toggleOption))?.data;
+    if (res) {
+      ElNotification({
+        message: '发表成功',
+        type: 'success',
+      });
+    }
+  }
+
+  tableRef.value?.search();
+}
 
 const adminArticleList = ref<AdminArticleType.AdminArticleListItem[]>([]);
 const tableTotalCount = ref(0);

@@ -46,10 +46,18 @@ const iconDynamicClass = computed(() => {
   border: 1px solid var(--el-color-info-light-7);
   cursor: pointer;
 
+  &:hover {
+    background-color: var(--el-color-info-light-7);
+  }
+
   &.is-red {
     background-color: #f56c6c;
     .circle-icon {
       color: #fff;
+    }
+
+    &:hover {
+      background-color: red;
     }
   }
 

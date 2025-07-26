@@ -20,3 +20,11 @@ export interface AdminArticleListApi {
   pages: number;
   size: number;
 }
+
+export interface DeleteArticleApi {
+  data: any;
+}
+
+export interface ToggleArticleOptionsApi {
+  data: any;
+}

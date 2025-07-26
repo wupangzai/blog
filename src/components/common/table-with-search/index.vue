@@ -81,6 +81,7 @@ const emits = defineEmits<{
   (e: 'search', payload?: any): void;
 }>();
 function search() {
+  console.log('[ 1 ] >');
   const pagesWithSearchParams = {
     ...Object.fromEntries(modelValue.value.map((item) => [item.prop, item.value])),
     ...pages.value,
@@ -100,6 +101,10 @@ function paginationChange() {
 
 onMounted(() => {
   search();
+});
+
+defineExpose({
+  search,
 });
 </script>
 

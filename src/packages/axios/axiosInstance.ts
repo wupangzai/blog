@@ -67,8 +67,6 @@ axiosInstance.interceptors.response.use(
         message: response.data.message,
         type: 'error',
       });
-      useCookie('Authorization').remove();
-      router.replace('/login');
     }
     return response.data;
   },
