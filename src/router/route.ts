@@ -90,6 +90,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'tag',
+        name: 'AdminTag',
+        component: () => import('@/components/admin/components/admin-tag/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];

@@ -58,6 +58,7 @@ import circleIcon from './circle-icon.vue';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
+import { useDoubleConifrm } from '@/hooks';
 
 const searchList = ref([
   {
@@ -146,6 +147,8 @@ async function operateTableActions(actionType: string, id: number, toggleOption 
   }
 
   if (actionType === 'delete') {
+    await useDoubleConifrm({ content: '是否确定要删除该文章？' });
+
     const success = (await API.AdminArticle.deleteArticle(id))?.success;
     if (success) {
       ElNotification({

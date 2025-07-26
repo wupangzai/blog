@@ -27,7 +27,9 @@ function close() {
 async function submit() {
   const isValid = await Form.validateRules(input.value);
   console.log('[ isValid ] >', isValid);
-  emits('update:visible', 'confirm', input.value.value);
+  if (isValid) {
+    emits('update:visible', 'confirm', input.value.value);
+  }
 }
 </script>
 

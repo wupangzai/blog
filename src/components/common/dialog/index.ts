@@ -29,7 +29,7 @@ export function initApp(rootApp: App) {
 /**
  * options 同类型接口
  */
-export function createDialog(options: Options): Promise<CloseType> {
+export function createDialog(options: Options): Promise<any> {
   // 创建一个容器用于挂载 Dialog
   const container = document.createElement('div');
   document.body.appendChild(container);

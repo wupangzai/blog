@@ -1,20 +1,22 @@
 <template>
-  <div class="admin-category">
+  <div class="admin-tag">
     <table-with-search
       class="table-class"
       ref="tableRef"
       v-model="searchList"
-      @search="getAdminCategoryList"
-      :table-data="adminCategoryList"
+      @search="getAdminTagList"
+      :table-data="adminTagList"
       :table-column="tableColumn"
       :total="tableTotalCount"
     >
       <template #table-header>
-        <el-button :icon="Plus" type="primary" @click="addCategoryFn">新增</el-button>
+        <el-button :icon="Plus" type="primary" @click="addTag">新增</el-button>
       </template>
 
       <template #default="{ row, column, index }">
         <span v-if="column.property === 'index'">{{ index + 1 }}</span>
+
+        <el-tag v-if="column.property === 'name'" type="success">{{ row[column.property] }}</el-tag>
 
         <el-button
           v-if="column.property === 'operations'"
@@ -32,14 +34,14 @@
 
 <script lang="ts" setup>
 import API from '@/api';
-import type { AdminCategoryType } from '@/api/types';
+import type { AdminTagType } from '@/api/types';
 import tableWithSearch from '@/components/common/table-with-search/index.vue';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
 import { Plus, Delete } from '@element-plus/icons-vue';
 import { ElNotification } from 'element-plus';
-import addCategory from './add-category.vue';
 import { useDialog } from '@/hooks';
+import addTagDialogContent from './add-tag-dialog-content.vue';
 import { useDoubleConifrm } from '@/hooks';
 
 const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
@@ -47,7 +49,7 @@ const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
 const searchList = ref([
   {
     prop: 'name',
-    label: '分类名称',
+    label: '标签名称',
     componentKey: 'input',
     value: '',
   },
@@ -72,7 +74,7 @@ const tableColumn = [
   },
   {
     prop: 'name',
-    label: '分类名称',
+    label: '标签名称',
     width: '200px',
   },
   {
@@ -93,17 +95,17 @@ const tableColumn = [
 ];
 
 const tableTotalCount = ref(0);
-const adminCategoryList = ref<AdminCategoryType.AdminCategoryListItem[]>([]);
+const adminTagList = ref<AdminTagType.AdminTagListItem[]>([]);
 
-async function getAdminCategoryList(payload?: any) {
+async function getAdminTagList(payload?: any) {
   const params = { ...payload };
   if (payload.createTime.length !== 0) {
     params.startDate = dayjs(payload.createTime[0]).format('YYYY-MM-DD');
     params.endDate = dayjs(payload.createTime[1]).format('YYYY-MM-DD');
   }
-  const res = await API.AdminCategory.getAdminCategoryList(params);
+  const res = await API.AdminTag.getAdminTagList(params);
   if (res) {
-    adminCategoryList.value = res.data;
+    adminTagList.value = res.data;
     tableTotalCount.value = res.total;
   }
 }
@@ -114,9 +116,9 @@ function refreshTable() {
 
 async function operateTableActions(actionType: string, id: number) {
   if (actionType === 'delete') {
-    await useDoubleConifrm({ content: '是否确定要删除该分类？' });
+    await useDoubleConifrm({ content: '是否确定要删除该标签？' });
 
-    const success = (await API.AdminCategory.deleteCategory(id))?.success;
+    const success = (await API.AdminTag.deleteTag(id))?.success;
 
     if (success) {
       ElNotification({
@@ -128,17 +130,17 @@ async function operateTableActions(actionType: string, id: number) {
   }
 }
 
-async function addCategoryFn() {
-  const categoryValue = await useDialog({
-    content: addCategory,
+async function addTag() {
+  const tagValue = await useDialog({
+    content: addTagDialogContent,
     dialogProps: {
-      title: '添加文章分类',
+      title: '添加文章标签',
       width: '650',
       showClose: true,
     },
   });
 
-  const success = (await API.AdminCategory.addCategory(categoryValue))?.success;
+  const success = (await API.AdminTag.addTag(tagValue))?.success;
 
   if (success) {
     ElNotification({
@@ -151,7 +153,7 @@ async function addCategoryFn() {
 </script>
 
 <style lang="less" scoped>
-.admin-category {
+.admin-tag {
   padding: 20px !important;
 
   .table-class {

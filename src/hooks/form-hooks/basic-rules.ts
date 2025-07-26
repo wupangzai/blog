@@ -24,6 +24,14 @@ export class Form {
   }
 }
 
+function isEmpty(value: any): boolean {
+  if (value == null) return true;
+  if (typeof value === 'string') return value.trim() === '';
+  if (Array.isArray(value)) return value.length === 0;
+  if (typeof value === 'object') return Object.keys(value).length === 0;
+  return false;
+}
+
 export function useRule<T>(initialValue: T, isRequired = true) {
   const rule = ref({
     value: initialValue,
@@ -36,7 +44,7 @@ export function useRule<T>(initialValue: T, isRequired = true) {
     validate(changeMes = true): boolean {
       // 提供重写覆盖，默认清除错误，验证通过
 
-      if (!this.value) {
+      if (isEmpty(this.value)) {
         this.errMsg = '请根据提示正确输入内容，且不为空';
         return false;
       }

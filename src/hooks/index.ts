@@ -9,3 +9,5 @@ export * as Rule from '@/hooks/form-hooks';
 export { useFullscreen } from '@/hooks/fullScreen-hooks';
 
 export { useAdminBreadCrumb } from '@/hooks/admin-bread-crumb-hooks';
+
+export { useDoubleConifrm } from '@/hooks/ui-hooks';
