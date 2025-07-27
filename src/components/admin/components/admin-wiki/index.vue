@@ -183,8 +183,8 @@ async function editCatelogWiki(row: AdminWikiType.AdminWikiListItem) {
       message: '修改成功',
       type: 'success',
     });
+    tableRef.value?.search();
   }
-  console.log('[ resolveValue ] >', resolveValue);
 }
 
 async function operateTableActions(actionType: string, id: number, toggleOption = true, row?: any) {

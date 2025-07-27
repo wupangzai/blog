@@ -18,7 +18,9 @@
       <div>
         <slot name="table-header"></slot>
       </div>
-      <el-table :data="props.tableData" class="table-class" border stripe>
+      <el-table :data="props.tableData" class="table-class" border stripe v-bind="$attrs">
+        <el-table-column v-if="props.showSelection" type="selection" width="55" />
+
         <el-table-column
           v-for="tableItem in props.tableColumn"
           v-bind="{ ...tableItem }"
@@ -26,6 +28,11 @@
           :prop="tableItem.prop"
           :label="tableItem.label"
         >
+          <template #header="{ column }">
+            <slot name="header" :column="column">
+              <span>{{ column.label }}</span>
+            </slot>
+          </template>
           <template #default="{ row, column, $index }">
             <slot name="default" :row="row" :column="column" :index="$index">
               <span>{{ row[column.property] }}</span>
@@ -59,10 +66,12 @@ interface Props {
   tableData: any[];
   tableColumn: any[];
   total: number;
+  showSelection?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tableData: () => [],
+  showSelection: false,
 });
 
 interface Pages {

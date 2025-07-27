@@ -35,7 +35,7 @@
                 <el-icon><EditPen /></el-icon>
                 重命名
               </el-dropdown-item>
-              <el-dropdown-item>
+              <el-dropdown-item @click="addArticle">
                 <el-icon><Plus /></el-icon>
                 添加文章
               </el-dropdown-item>
@@ -66,6 +66,7 @@
       :total="props.total"
       @delete="emits('delete', subItem.id)"
       @move="(id, type) => emits('move', id, type)"
+      @add-article="(id, resolveValue) => emits('addArticle', id, resolveValue)"
     />
   </el-sub-menu>
 </template>
@@ -73,9 +74,10 @@
 <script lang="ts" setup>
 import type { AdminWikiType } from '@/api/types';
 import menuItemComponent from '@/components/admin/components/admin-wiki/edit-catelog-wiki/menu-item.vue';
-import { computed } from 'vue';
+import { computed, type Ref } from 'vue';
 import { EditPen, Delete, MoreFilled, Plus, Top, Bottom } from '@element-plus/icons-vue';
-import { useDoubleConifrm } from '@/hooks';
+import { useDialog, useDoubleConifrm } from '@/hooks';
+import addArticleComponent from './add-article.vue';
 
 interface Props {
   total: number;
@@ -106,6 +108,22 @@ async function deleteSubMenu() {
   emits('delete', modelValue.value.id);
 }
 
+async function addArticle() {
+  const resolveValue = (await useDialog({
+    content: addArticleComponent,
+    slotProps: {
+      id: modelValue.value.id,
+    },
+    dialogProps: {
+      title: '添加文章',
+      width: '1080',
+      showClose: true,
+    },
+  })) as Ref<AdminWikiType.AdminWikiCatelogItem[]>;
+
+  emits('addArticle', modelValue.value.id, resolveValue.value);
+}
+
 type MoveType = 'up' | 'down';
 function move(type: MoveType) {
   emits('move', modelValue.value.id, type);
@@ -114,6 +132,7 @@ function move(type: MoveType) {
 const emits = defineEmits<{
   (e: 'delete', id: number): void;
   (e: 'move', id: number, type: MoveType): void;
+  (e: 'addArticle', id: number, resolveValue: AdminWikiType.AdminWikiCatelogItem[]): void;
 }>();
 </script>
 

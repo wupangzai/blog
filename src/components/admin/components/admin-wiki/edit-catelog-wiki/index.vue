@@ -11,6 +11,7 @@
         :total="adminWikiCatelogList.length"
         @delete="deleteMenuItem"
         @move="moveSubMenu"
+        @add-article="AddArticleFn"
       />
     </el-menu>
 
@@ -31,7 +32,11 @@ import { onMounted, ref, watchEffect } from 'vue';
 import { ElNotification } from 'element-plus';
 import { addIndexToMenu } from '../../admin-menu/const';
 import menuItemComponent from '@/components/admin/components/admin-wiki/edit-catelog-wiki/menu-item.vue';
-import { removeItemByIdFromChildren, moveItemByIdFromChildren } from './utils';
+import {
+  removeItemByIdFromChildren,
+  moveItemByIdFromChildren,
+  addItemsToChildrenById,
+} from './utils';
 
 interface Props {
   wikiItem: AdminWikiType.AdminWikiListItem;
@@ -100,6 +105,24 @@ function moveSubMenu(id: number, type: MoveType) {
   adminWikiCatelogList.value = moveItemByIdFromChildren(adminWikiCatelogList.value, id, type);
 }
 
+function AddArticleFn(_id: number, resolveValue: AdminWikiType.AdminWikiCatelogItem[]) {
+  const listWithNewAttribute = resolveValue.map((item) => {
+    id.value = id.value - 1;
+
+    item.editing = false;
+    item.articleId = item.id;
+    item.id = id.value;
+    item.children = [];
+    return item;
+  });
+
+  adminWikiCatelogList.value = addItemsToChildrenById(
+    adminWikiCatelogList.value,
+    _id,
+    listWithNewAttribute
+  );
+}
+
 async function submit() {
   const payload = {
     catalogs: adminWikiCatelogList.value,
@@ -110,7 +133,11 @@ async function submit() {
 }
 
 const emits = defineEmits<{
-  (e: 'update:visible', closeType: string, resolveValue?: any): void;
+  (
+    e: 'update:visible',
+    closeType: string,
+    resolveValue?: AdminWikiType.addAdminWikiCatelogApiPayload
+  ): void;
 }>();
 
 function close() {

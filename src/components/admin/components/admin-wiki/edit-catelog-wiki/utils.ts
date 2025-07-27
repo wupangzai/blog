@@ -70,3 +70,40 @@ export function moveItemByIdFromChildren(
 
   return recursive(list);
 }
+
+export function addItemsToChildrenById(
+  list: AdminWikiType.AdminWikiCatelogItem[],
+  idToFind: number,
+  newItems: AdminWikiType.AdminWikiCatelogItem[]
+): AdminWikiType.AdminWikiCatelogItem[] {
+  const recursive = (
+    items: AdminWikiType.AdminWikiCatelogItem[]
+  ): AdminWikiType.AdminWikiCatelogItem[] => {
+    return items.map((item) => {
+      if (item.id === idToFind) {
+        const oldChildren = item.children ?? [];
+
+        // 合并旧children和新items
+        const combinedChildren = [...oldChildren, ...newItems];
+
+        // 重新给所有children的sort排序，从1开始递增
+        const sortedChildren = combinedChildren.map((child, idx) => ({
+          ...child,
+          sort: idx + 1,
+        }));
+
+        return {
+          ...item,
+          children: sortedChildren,
+        };
+      }
+
+      return {
+        ...item,
+        children: item.children?.length ? recursive(item.children) : item.children,
+      };
+    });
+  };
+
+  return recursive(list);
+}
