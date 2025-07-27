@@ -60,6 +60,7 @@ import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import { useDialog, useDoubleConifrm } from '@/hooks';
 import addWikiComponent from '@/components/admin/components/admin-wiki/add-wiki/index.vue';
+import editCatelogWikiComponent from '@/components/admin/components/admin-wiki/edit-catelog-wiki/index.vue';
 
 const searchList = ref([
   {
@@ -161,6 +162,31 @@ async function operateWiki(type: string, initValue: any = {}) {
     tableRef.value?.search();
   }
 }
+
+async function editCatelogWiki(row: AdminWikiType.AdminWikiListItem) {
+  const resolveValue = await useDialog({
+    content: editCatelogWikiComponent,
+    slotProps: {
+      wikiItem: row,
+    },
+    dialogProps: {
+      title: '编辑目录',
+      width: '1180',
+      showClose: true,
+    },
+  });
+
+  const success = (await API.AdminWiki.updateAdminWikiCatelog(resolveValue))?.success;
+
+  if (success) {
+    ElNotification({
+      message: '修改成功',
+      type: 'success',
+    });
+  }
+  console.log('[ resolveValue ] >', resolveValue);
+}
+
 async function operateTableActions(actionType: string, id: number, toggleOption = true, row?: any) {
   if (actionType === 'add') {
     operateWiki(actionType);
@@ -173,6 +199,7 @@ async function operateTableActions(actionType: string, id: number, toggleOption 
   }
 
   if (actionType === 'toc') {
+    editCatelogWiki(row);
   }
 
   if (actionType === 'view') {

@@ -42,3 +42,27 @@ export interface AdminUploadFileApi {
   data: UploadData;
   success: boolean;
 }
+
+export interface AdminWikiCatelogItem {
+  articleId: number | null;
+  children: addAdminWikiCatelogItem[];
+  editing: boolean;
+  id: number;
+  level: number;
+  sort: number;
+  title: string;
+  index?: number;
+}
+
+export interface getAdminWikiCatelogList {
+  data: AdminWikiCatelogItem[];
+}
+
+export interface addAdminWikiCatelogApiPayload {
+  catalogs: AdminWikiCatelogItem[];
+  id: number;
+}
+export interface addAdminWikiCatelogApi {
+  data: null;
+  success: boolean;
+}

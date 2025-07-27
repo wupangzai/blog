@@ -65,3 +65,27 @@ export async function addAdminWiki(payload: AdminWikiType.AddWikiApiPayload) {
     console.log(e);
   }
 }
+
+export async function getAdminWikiCatelogList(id: number) {
+  try {
+    const res = await http.postJson<AdminWikiType.getAdminWikiCatelogList>(
+      '/api/admin/wiki/catalog/list',
+      id
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function updateAdminWikiCatelog(payload: AdminWikiType.addAdminWikiCatelogApiPayload) {
+  try {
+    const res = await http.postJson<AdminWikiType.addAdminWikiCatelogApi>(
+      '/api/admin/wiki/catalog/update',
+      payload
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}

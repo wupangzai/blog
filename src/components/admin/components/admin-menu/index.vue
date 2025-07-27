@@ -63,7 +63,6 @@ defineExpose({
 
 .custom-menu {
   --el-menu-bg-color: #1e293b;
-  --el-menu-text-color: #fff;
   --el-menu-hover-bg-color: #2c3647;
   --el-menu-active-bg-color: var(--el-color-primary);
   --el-menu-text-color: #fff;
