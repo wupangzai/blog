@@ -98,6 +98,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'wiki',
+        name: 'AdminWiki',
+        component: () => import('@/components/admin/components/admin-wiki/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];

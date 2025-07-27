@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Edit, View, Delete } from '@element-plus/icons-vue';
+import { Edit, View, Delete, Tickets } from '@element-plus/icons-vue';
 import { computed } from 'vue';
 
 interface Props {
@@ -20,6 +20,9 @@ const renderIcon = computed(() => {
   switch (props.icon) {
     case 'edit':
       return Edit;
+
+    case 'toc':
+      return Tickets;
 
     case 'view':
       return View;

@@ -48,6 +48,7 @@ export function useRule<T>(initialValue: T, isRequired = true) {
         this.errMsg = '请根据提示正确输入内容，且不为空';
         return false;
       }
+      this.errMsg = '';
       return true;
     },
   });

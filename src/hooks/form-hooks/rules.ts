@@ -8,6 +8,7 @@ const useAccount = (initialValue = '', isRequired = true) => {
       changeMes && (account.value.errMsg = '请输入账号');
       return false;
     }
+    account.value.errMsg = '';
     return true;
   };
 
@@ -22,6 +23,7 @@ const usePassword = (initialValue = '', isRequired = true) => {
       changeMes && (password.value.errMsg = '请输入密码');
       return false;
     }
+    password.value.errMsg = '';
     return true;
   };
 

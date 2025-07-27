@@ -31,14 +31,24 @@ async function post<T = any, R = any>(
   type?: string
 ): Promise<T> {
   let contentType, body: any;
+  const formData = new FormData();
+
   switch (type) {
     case 'form':
       contentType = 'application/x-www-form-urlencoded';
       body = qs.stringify(data); // TODO:FIXME stringify
+      console.log('[ body ] >', body);
       break;
     case 'json':
       contentType = 'application/json';
       body = data;
+      break;
+    case 'multi':
+      Object.entries(data || {}).forEach(([key, value]) => {
+        formData.append(key, value as any);
+      });
+      body = formData;
+      // ❗️注意：不需要手动设置 multipart 的 Content-Type，浏览器会自动带上正确的 boundary
       break;
   }
 
@@ -61,6 +71,10 @@ async function postForm<T = any, R = any>(url: string, data?: R, config?: AxiosR
   return await post<T, R>(url, data, config, 'form');
 }
 
+async function postMulti<T = any, R = any>(url: string, data?: R, config?: AxiosRequestConfig) {
+  return await post<T, R>(url, data, config, 'multi');
+}
+
 // 传入 object 修改 options 中的配置，用于拦截钩子
 function setOptions(opts: any) {
   Object.entries(opts).forEach(([key, value]) => {
@@ -73,6 +87,7 @@ export const http = {
 
   postJson,
   postForm,
+  postMulti,
 
   setOptions,
 };

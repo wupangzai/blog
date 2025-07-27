@@ -23,3 +23,5 @@ export type * as AdminArticleType from '@/api/admin-article/types';
 export type * as AdminCategoryType from '@/api/admin-category/types';
 
 export type * as AdminTagType from '@/api/admin-tag/types';
+
+export type * as AdminWikiType from '@/api/admin-wiki/types';
