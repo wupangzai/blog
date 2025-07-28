@@ -27,3 +27,5 @@ export type * as AdminTagType from '@/api/admin-tag/types';
 export type * as AdminWikiType from '@/api/admin-wiki/types';
 
 export type * as AdminCommentType from '@/api/admin-comment/types';
+
+export type * as AdminNoticeType from '@/api/admin-notice/types';

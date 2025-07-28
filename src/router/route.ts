@@ -114,6 +114,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'notice',
+        name: 'AdminNotice',
+        component: () => import('@/components/admin/components/admin-notice/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];
