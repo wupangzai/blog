@@ -7,6 +7,7 @@
           v-model="tableFormItem.value"
           :key="tableFormItem.prop"
           :table-form-item="tableFormItem"
+          v-bind="$attrs"
         />
       </el-form>
       <div class="btn-group">
@@ -27,6 +28,7 @@
           :key="tableItem.prop"
           :prop="tableItem.prop"
           :label="tableItem.label"
+          show-overflow-tooltip
         >
           <template #header="{ column }">
             <slot name="header" :column="column">

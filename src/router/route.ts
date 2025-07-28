@@ -106,6 +106,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'comment',
+        name: 'AdminComment',
+        component: () => import('@/components/admin/components/admin-comment/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];

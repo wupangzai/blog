@@ -11,6 +11,7 @@ import * as AdminArticle from '@/api/admin-article';
 import * as AdminCategory from '@/api/admin-category';
 import * as AdminTag from '@/api/admin-tag';
 import * as AdminWiki from '@/api/admin-wiki';
+import * as AdminComment from '@/api/admin-comment';
 
 export default class API {
   // front
@@ -29,4 +30,5 @@ export default class API {
   static AdminCategory = AdminCategory;
   static AdminTag = AdminTag;
   static AdminWiki = AdminWiki;
+  static AdminComment = AdminComment;
 }
