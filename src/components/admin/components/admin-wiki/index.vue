@@ -36,12 +36,17 @@
         />
 
         <div class="table-operations" v-if="column.property === 'operations'">
-          <circle-icon
+          <el-tooltip
             v-for="(iconItem, index) in tableActionList"
             :key="index"
-            :icon="iconItem.icon"
-            @click="iconItem.callback(iconItem.icon, row.id, true, row)"
-          />
+            effect="dark"
+            :content="iconItem.tooltip"
+          >
+            <circle-icon
+              :icon="iconItem.icon"
+              @click="iconItem.callback(iconItem.icon, row.id, true, row)"
+            />
+          </el-tooltip>
         </div>
       </template>
     </table-with-search>
@@ -119,18 +124,22 @@ const tableColumn = [
 const tableActionList = ref([
   {
     icon: 'edit',
+    tooltip: '编辑',
     callback: operateTableActions,
   },
   {
     icon: 'toc',
+    tooltip: '编辑目录',
     callback: operateTableActions,
   },
   {
     icon: 'view',
+    tooltip: '预览',
     callback: operateTableActions,
   },
   {
     icon: 'delete',
+    tooltip: '删除',
     callback: operateTableActions,
   },
 ]);
