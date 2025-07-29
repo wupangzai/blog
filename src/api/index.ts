@@ -13,6 +13,7 @@ import * as AdminTag from '@/api/admin-tag';
 import * as AdminWiki from '@/api/admin-wiki';
 import * as AdminComment from '@/api/admin-comment';
 import * as AdminNotice from '@/api/admin-notice';
+import * as AdminBlogSetting from '@/api/admin-blog-setting';
 
 export default class API {
   // front
@@ -33,4 +34,5 @@ export default class API {
   static AdminWiki = AdminWiki;
   static AdminComment = AdminComment;
   static AdminNotice = AdminNotice;
+  static AdminBlogSetting = AdminBlogSetting;
 }

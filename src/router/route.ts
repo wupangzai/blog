@@ -122,6 +122,14 @@ const routes: RouteRecordRaw[] = [
           requireAuth: true,
         },
       },
+      {
+        path: 'blogSetting',
+        name: 'AdminBlog',
+        component: () => import('@/components/admin/components/admin-blog-setting/index.vue'),
+        meta: {
+          requireAuth: true,
+        },
+      },
     ],
   },
 ];
