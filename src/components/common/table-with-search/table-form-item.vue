@@ -28,8 +28,6 @@
 
 <script lang="ts" setup>
 import type { SearchListItem } from '@/components/common/table-with-search/const';
-import { ElInput, ElDatePicker, ElSelect, ElOption } from 'element-plus';
-
 import { computed } from 'vue';
 
 interface Props {
@@ -49,11 +47,11 @@ const itemNeedCustom = computed(() => {
 const getFormItemComponentType = computed(() => {
   switch (props.tableFormItem.componentKey) {
     case 'input':
-      return ElInput;
+      return 'el-input';
     case 'date-picker':
-      return ElDatePicker;
+      return 'el-date-picker';
     case 'select':
-      return ElSelect;
+      return 'el-select';
     default:
       return void 0;
   }
