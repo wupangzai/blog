@@ -1,0 +1,38 @@
+name: 打包部署Vue项目
+
+on:
+  push:
+    branches:
+      - master # 注意是main分支还是master分支
+
+env:
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  DEMO_PATH: ${{ secrets.DEMO_PATH }}
+
+jobs:
+  npm-build:
+    name: npm-build工作
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 读取仓库内容 🤔
+        uses: actions/checkout@v4 # 复制文件到github，解决ubuntu路径问题
+
+      - name: 安装依赖⚙
+        run: npm install
+
+      - name: 项目打包中📦
+        run: npm run build
+
+      - name: 📂 配置 SSH 访问服务器
+
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no root@$SERVER_HOST "echo 'SSH Connection Successful!'"
+
+      - name: 🚀 使用 SCP 上传文件到服务器
+        run: |
+          scp -i ~/.ssh/id_rsa -r dist root@$SERVER_HOST:$DEMO_PATH
