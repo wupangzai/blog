@@ -54,7 +54,7 @@ const getFormItemComponentType = computed(() => {
     case 'select':
       return 'el-select';
     default:
-      return void 0;
+      return '';
   }
 });
 

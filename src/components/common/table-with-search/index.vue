@@ -2,7 +2,7 @@
   <div class="table-with-search">
     <div class="search-list">
       <el-form class="search-form">
-        <table-form-item
+        <table-form-item-component
           v-for="tableFormItem in modelValue"
           v-model="tableFormItem.value"
           :key="tableFormItem.prop"
@@ -60,7 +60,7 @@
 
 <script lang="ts" setup>
 import type { SearchListItem } from '@/components/common/table-with-search/const';
-import tableFormItem from './table-form-item.vue';
+import tableFormItemComponent from './table-form-item.vue';
 import { Search, RefreshRight } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 
