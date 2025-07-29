@@ -10,7 +10,7 @@
       :total="tableTotalCount"
     >
       <template #table-header>
-        <el-button :icon="EditPen" type="primary">写文章</el-button>
+        <el-button :icon="EditPen" type="primary" @click="writeArticle">写文章</el-button>
       </template>
       <template #default="{ row, column, index }">
         <span v-if="column.property === 'index'">{{ index + 1 }}</span>
@@ -60,7 +60,8 @@ import circleIcon from './circle-icon.vue';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
-import { useDoubleConifrm } from '@/hooks';
+import { useDialog, useDoubleConifrm } from '@/hooks';
+import writeArticleComponent from './write-article.vue';
 
 const searchList = ref([
   {
@@ -139,8 +140,24 @@ const router = useRouter();
 const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
 async function operateTableActions(actionType: string, id: number, toggleOption = true) {
   if (actionType === 'edit') {
-    // todo
-    return;
+    const resolveValue = await useDialog({
+      content: writeArticleComponent,
+      slotProps: {
+        id,
+        type: 'edit',
+      },
+      dialogProps: {
+        fullscreen: true,
+      },
+    });
+    console.log('[resolveValue ] >', resolveValue);
+    const success = (await API.AdminArticle.updateArticle({ ...resolveValue, id }))?.success;
+    if (success) {
+      ElNotification({
+        message: '修改成功',
+        type: 'success',
+      });
+    }
   }
   if (actionType === 'view') {
     router.push({
@@ -199,6 +216,25 @@ async function getAdminArticleList(payload?: any) {
   if (res) {
     adminArticleList.value = res.data;
     tableTotalCount.value = res.total;
+  }
+}
+
+async function writeArticle() {
+  const resolveValue = await useDialog({
+    content: writeArticleComponent,
+    dialogProps: {
+      fullscreen: true,
+    },
+  });
+
+  const success = (await API.AdminArticle.publishArticle(resolveValue))?.success;
+
+  if (success) {
+    ElNotification({
+      message: '发布成功',
+      type: 'success',
+    });
+    tableRef.value?.search();
   }
 }
 </script>

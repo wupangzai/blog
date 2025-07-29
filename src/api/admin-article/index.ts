@@ -48,3 +48,61 @@ export async function toggleIsPublish(id: number, isPublish: boolean) {
     console.log(e);
   }
 }
+
+export async function getAdminCategorySelectLsit() {
+  try {
+    const res = await http.postJson<AdminArticleType.getAdminCategorySelectLsitApi>(
+      '/api/admin/category/select/list'
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getAdminTagSelectLsit() {
+  try {
+    const res = await http.postJson<AdminArticleType.getAdminCategorySelectLsitApi>(
+      '/api/admin/tag/select/list'
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function publishArticle(payload: AdminArticleType.PublishArticleApiPayload) {
+  try {
+    const res = await http.postJson<AdminArticleType.PublishArticleApi>(
+      '/api/admin/article/publish',
+      payload
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getAdminArticleDetail(id: number) {
+  try {
+    const res = await http.postJson<AdminArticleType.GetAdminArticleDetail>(
+      '/api/admin/article/detail',
+      { id }
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function updateArticle(payload: AdminArticleType.PublishArticleApiPayload) {
+  try {
+    const res = await http.postJson<AdminArticleType.PublishArticleApi>(
+      '/api/admin/article/update',
+      payload
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}

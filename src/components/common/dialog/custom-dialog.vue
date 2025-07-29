@@ -28,6 +28,7 @@ const props = defineProps<{
   showClose?: boolean;
   closeOnClickModal?: boolean;
   closeOnPressEscape?: boolean;
+  fullscreen?: boolean;
 }>();
 
 const emits = defineEmits<{
