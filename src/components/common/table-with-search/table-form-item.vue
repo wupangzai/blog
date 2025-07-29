@@ -45,6 +45,7 @@ const itemNeedCustom = computed(() => {
 });
 
 const getFormItemComponentType = computed(() => {
+  console.log('[ props.tableFormItem.componentKey ] >', props.tableFormItem.componentKey);
   switch (props.tableFormItem.componentKey) {
     case 'input':
       return 'el-input';

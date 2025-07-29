@@ -87,6 +87,7 @@ const pages = ref<Pages>({
 });
 
 const modelValue = defineModel<SearchListItem[]>({ default: () => [] });
+console.log('[ modelValue ] >', modelValue);
 
 const emits = defineEmits<{
   (e: 'search', payload?: any): void;
