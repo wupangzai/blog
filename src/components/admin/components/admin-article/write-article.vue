@@ -48,7 +48,7 @@
             '-',
             '=', // 分隔符（竖线/换行）
           ]"
-          :preview-theme="'github'"
+          :preview-theme="'vuepress'"
           :code-theme="'github'"
           language="zh-CN"
           style="height: 60vh"

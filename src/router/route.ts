@@ -47,11 +47,17 @@ const routes: RouteRecordRaw[] = [
     path: '/article/:id',
     name: 'Article',
     component: () => import('@/components/article/index.vue'),
+    meta: {
+      isShowPageHeader: true,
+    },
   },
   {
     path: '/wiki/:id',
     name: 'WikiDetail',
     component: () => import('@/components/wiki-detail/index.vue'),
+    meta: {
+      isShowPageHeader: true,
+    },
   },
   {
     path: '/login',
