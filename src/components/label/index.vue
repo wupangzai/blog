@@ -80,7 +80,7 @@ watch(
   () => {
     page.value.id = route.query.id as string;
     getlabelsTagList();
-    getTagsArticleList(page.value);
+    route.query.id && getTagsArticleList(page.value);
   },
   { immediate: true }
 );
