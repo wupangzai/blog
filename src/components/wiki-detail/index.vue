@@ -98,7 +98,7 @@ watch(
       }
     }
     .article-toc {
-      width: 320px;
+      width: 280px;
     }
   }
 

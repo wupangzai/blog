@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
   .header-content {
     width: 75%;
     max-width: 1280px;
-    height: 238px;
+    min-height: 238px;
     padding: 40px 24px 56px 24px;
 
     .tags {
@@ -70,6 +70,7 @@ const props = withDefaults(defineProps<Props>(), {
     .icon-group {
       display: flex;
       gap: 24px;
+      flex-wrap: wrap;
     }
 
     .group-item {
