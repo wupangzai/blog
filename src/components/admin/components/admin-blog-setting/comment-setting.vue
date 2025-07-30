@@ -33,7 +33,7 @@
       >
         <el-input v-model="mail.value"></el-input>
         <el-alert type="info" show-icon :closable="false" class="alert">
-          开启后，评论需要博主后台审核通过后，才会展示出来
+          当被评论后，用于主动发送邮件通知博主
         </el-alert>
       </el-form-item>
     </el-form>

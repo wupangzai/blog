@@ -32,6 +32,7 @@ import contentBtns from './content-btns.vue';
 import contentOperations from './content-operations/content-operations.vue';
 import operationAvatar from './content-operations/operation-avatar.vue';
 import { useRouter } from 'vue-router';
+import { useCrtlKArticleSearch } from '@/hooks';
 
 interface Props {
   contentTitle?: string;
@@ -46,8 +47,9 @@ const props = withDefaults(defineProps<Props>(), {
 const router = useRouter();
 function changeActiveBtn(path: string) {
   router.push(path);
-  console.log('[ name ] >', path);
 }
+
+useCrtlKArticleSearch();
 
 const switchChecked = ref(false);
 </script>

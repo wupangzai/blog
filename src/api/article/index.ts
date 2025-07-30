@@ -20,3 +20,12 @@ export async function getArticleDetail(id: number) {
     console.log(e);
   }
 }
+
+export async function searchArticle(payload: ArticleType.ArticleSearchPayload) {
+  try {
+    const res = await http.postJson<ArticleType.SearchArticleApi>('/api/article/search', payload);
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}

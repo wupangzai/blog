@@ -1,4 +1,4 @@
-import { TagsCardType } from '@/api/types';
+import { TagsCardType, CommonType } from '@/api/types';
 
 export interface Page {
   current: number;
@@ -42,4 +42,14 @@ export interface ArticleDetailData {
 }
 export interface ArticleDetail {
   data: ArticleDetailData;
+}
+
+export interface ArticleSearchPayload extends CommonType.Page {
+  word: string;
+}
+
+export type ArticleSearchItem = Omit<ArticleItem, 'tags' | 'isTop' | 'category'>;
+
+export interface SearchArticleApi {
+  data: ArticleSearchItem[];
 }

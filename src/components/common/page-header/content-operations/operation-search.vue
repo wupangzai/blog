@@ -13,22 +13,12 @@
 
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue';
-import { useDialog } from '@/hooks';
-import searchDialogContent from './search-dialog-content.vue';
+import { useArticleSearch } from '@/hooks';
 
 const buttonText = '搜索文章...';
 
 async function search() {
-  await useDialog({
-    content: searchDialogContent,
-    dialogProps: {
-      width: '640',
-      showClose: false,
-      closeOnClickModal: false,
-      footer: false,
-      closeOnPressEscape: true,
-    },
-  });
+  await useArticleSearch();
 }
 </script>
 

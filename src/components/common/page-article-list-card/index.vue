@@ -4,7 +4,7 @@
       <img :src="props.listItem.cover" alt="" />
     </div>
     <div class="description">
-      <div class="title">{{ props.listItem.title }}</div>
+      <div class="title"><span v-html="props.listItem.title"></span></div>
       <div class="date">
         <img :src="calendarSvg" alt="" />
         <div class="date-text">{{ props.listItem.createDate }}</div>

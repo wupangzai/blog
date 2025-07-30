@@ -10,4 +10,9 @@ export { useFullscreen } from '@/hooks/fullScreen-hooks';
 
 export { useAdminBreadCrumb } from '@/hooks/admin-bread-crumb-hooks';
 
-export { useDoubleConifrm } from '@/hooks/ui-hooks';
+export {
+  useDoubleConifrm,
+  useArticleSearch,
+  useCrtlKArticleSearch,
+  useCrtlKSearch,
+} from '@/hooks/ui-hooks';
