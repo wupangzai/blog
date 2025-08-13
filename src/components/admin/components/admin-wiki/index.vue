@@ -10,7 +10,7 @@
       :total="tableTotalCount"
     >
       <template #table-header>
-        <el-button :icon="Plus" type="primary" @click="operateWiki">新增知识库</el-button>
+        <el-button :icon="Plus" type="primary" @click="operateWiki('add')">新增知识库</el-button>
       </template>
       <template #default="{ row, column, index }">
         <span v-if="column.property === 'index'">{{ index + 1 }}</span>
@@ -148,7 +148,8 @@ const router = useRouter();
 const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
 
 async function operateWiki(type: string, initValue: any = {}) {
-  const title = type === 'add' ? '新增知识库' : '编辑知识库';
+  const isAddAction = type === 'add';
+  const title = isAddAction ? '新增知识库' : '编辑知识库';
   const resolveValue = await useDialog({
     content: addWikiComponent,
     slotProps: {
@@ -161,11 +162,14 @@ async function operateWiki(type: string, initValue: any = {}) {
     },
   });
 
-  const addResult = await API.AdminWiki.addAdminWiki(resolveValue);
+  let result;
+  isAddAction
+    ? (result = await API.AdminWiki.addAdminWiki(resolveValue))
+    : (result = await API.AdminWiki.updateAdminWiki({ ...resolveValue, id: initValue.id }));
 
-  if (addResult?.success) {
+  if (result?.success) {
     ElNotification({
-      message: '添加成功',
+      message: isAddAction ? '添加成功' : '修改成功',
       type: 'success',
     });
     tableRef.value?.search();

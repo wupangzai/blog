@@ -59,7 +59,16 @@ export async function adminUploadfile(file: UploadFile['raw']) {
 
 export async function addAdminWiki(payload: AdminWikiType.AddWikiApiPayload) {
   try {
-    const res = await http.postJson<AdminWikiType.AddWikiApi>('/admin/wiki/add', payload);
+    const res = await http.postJson<AdminWikiType.AddWikiApi>('/api/admin/wiki/add', payload);
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function updateAdminWiki(payload: AdminWikiType.AddWikiApiPayload) {
+  try {
+    const res = await http.postJson<AdminWikiType.AddWikiApi>('/api/admin/wiki/update', payload);
     return res;
   } catch (e) {
     console.log(e);
