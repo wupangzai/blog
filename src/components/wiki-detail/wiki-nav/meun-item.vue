@@ -30,7 +30,7 @@ interface Props {
   parentLevel?: number;
 }
 
-const isMenuItem = computed(() => !props.item.children);
+const isMenuItem = computed(() => props.item.children.length === 0 && props.item.level !== 1);
 
 const props = defineProps<Props>();
 
