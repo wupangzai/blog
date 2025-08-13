@@ -35,9 +35,11 @@ axiosInstance.interceptors.request.use(
     // header 设置，配合后面 setOption 函数，达到动态控制 header 的效果
     const { headers } = options;
 
+    const authorization = useCookie('Authorization').get();
+
     Object.keys(headers).forEach((header) => {
       config.headers[header] = headers[header];
-      if (header === 'Authorization') {
+      if (header === 'Authorization' && authorization) {
         config.headers[header] =
           config.headers[header] || `Bearer ${useCookie('Authorization').get()}`;
       }
