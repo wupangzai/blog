@@ -3,6 +3,7 @@
     <notice-board :noticeHtml="noticeHtml" />
     <div class="page-container">
       <list-page-card
+        class="list-card"
         v-for="pageItem in articleList"
         :key="pageItem.id"
         :page-card="pageItem"
@@ -82,6 +83,10 @@ onMounted(() => {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+
+    .list-card {
+      flex: 50%;
+    }
   }
 
   .pagination {
