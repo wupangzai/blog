@@ -1,7 +1,7 @@
 <template>
   <div class="operation-avatar">
     <el-dropdown placement="bottom">
-      <img src="@/assets/imgs/avatar.jpg" alt="" />
+      <img :src="props.avatar" alt="" />
       <template #dropdown>
         <el-dropdown-menu v-if="props.isShowDropDown">
           <el-dropdown-item
@@ -38,10 +38,12 @@ const actionsMapList = [
 
 interface Props {
   isShowDropDown?: boolean;
+  avatar?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isShowDropDown: false,
+  avatar: '',
 });
 
 const router = useRouter();

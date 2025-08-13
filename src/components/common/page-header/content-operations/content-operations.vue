@@ -2,7 +2,7 @@
   <div class="content-operations">
     <operation-theme />
     <operation-search />
-    <operation-avatar :is-show-drop-down="true" />
+    <operation-avatar :is-show-drop-down="true" v-bind="$attrs" />
   </div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
-  <div class="notice-board">
+  <div class="notice-board" v-if="isShowNotice">
     <img :src="noticeSvg" alt="" />
-    <div v-html="noticeHtmlWithPrefix"></div>
-    <el-icon><Close /></el-icon>
+    <div v-html="noticeHtmlWithPrefix" class="notice-content"></div>
+    <el-icon class="close-icon" @click="closeNotice"><Close /></el-icon>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import noticeSvg from '@/assets/svg/notice.svg';
 import { Close } from '@element-plus/icons-vue';
 
@@ -22,6 +22,11 @@ const props = withDefaults(defineProps<Props>(), {
 const noticeHtmlWithPrefix = computed(() => {
   return '公告：' + props.noticeHtml;
 });
+
+const isShowNotice = ref(true);
+function closeNotice() {
+  isShowNotice.value = false;
+}
 </script>
 
 <style lang="less" scoped>
@@ -36,10 +41,20 @@ const noticeHtmlWithPrefix = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  flex-shrink: 0; /* 不允许收缩 */
 
   & img {
     width: 16px;
     height: 16px;
+  }
+
+  .notice-content {
+    flex: 1;
+  }
+
+  .close-icon {
+    cursor: pointer;
   }
 
   :deep(a) {

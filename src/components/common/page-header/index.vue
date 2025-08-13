@@ -2,11 +2,11 @@
   <el-header class="page-header">
     <header-content>
       <template #content-pic>
-        <operation-avatar />
+        <operation-avatar :avatar="profile.avatar" />
       </template>
 
       <template #content-title>
-        <div class="content-title">{{ props.contentTitle }}</div>
+        <div class="content-title">{{ profile.name }}</div>
       </template>
 
       <template #content-btn>
@@ -15,7 +15,7 @@
 
       <template #content-right>
         <div class="content-right">
-          <content-operations v-model="switchChecked"></content-operations>
+          <content-operations v-model="switchChecked" :avatar="profile.avatar"></content-operations>
         </div>
       </template>
     </header-content>
@@ -32,17 +32,17 @@ import contentBtns from './content-btns.vue';
 import contentOperations from './content-operations/content-operations.vue';
 import operationAvatar from './content-operations/operation-avatar.vue';
 import { useRouter } from 'vue-router';
-import { useCrtlKArticleSearch } from '@/hooks';
+import { useCrtlKArticleSearch, useStates } from '@/hooks';
 
 interface Props {
-  contentTitle?: string;
   btnNames?: DefaultBtnsList[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  contentTitle: '就是会⑧⑤②的博客',
   btnNames: () => defaultBtnsList,
 });
+
+const { profile } = useStates('commonModule', ['profile']);
 
 const router = useRouter();
 function changeActiveBtn(path: string) {
