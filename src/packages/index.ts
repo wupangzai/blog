@@ -3,6 +3,7 @@ import http from '@/packages/axios';
 import AOS from '@/packages/aos';
 import type { App } from 'vue';
 import VueECharts from '@/packages/vue-charts';
+import '@/packages/md-editor-v3';
 
 const packagesList = [ElementUI, http];
 

@@ -3,7 +3,11 @@
     <article-header :article-detail="articleDetail" />
     <div class="article-content-container">
       <div class="article-detail">
-        <div class="article-content" v-html="articleDetail.content"></div>
+        <md-preview
+          :model-value="articleDetail.content"
+          :code-foldable="false"
+          @get-catalog="getCatalog"
+        />
         <last-edit :update-time="articleDetail.updateTime" />
         <div class="next-pre-control">
           <next-article
@@ -16,7 +20,7 @@
       </div>
       <div class="side-bar">
         <side-bar />
-        <article-toc class="article-top" :article-detail="articleDetail" />
+        <article-toc class="article-top" :article-detail="articleDetail" :catalog="catalog" />
       </div>
     </div>
   </div>
@@ -33,6 +37,7 @@ import sideBar from '@/components/common/side-bar/index.vue';
 import articleToc from '@/components/article/article-toc/index.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import nextArticle from '@/components/article/next-article/index.vue';
+import { MdPreview } from 'md-editor-v3';
 
 const route = useRoute();
 const articleDetail = ref<ArticleType.ArticleDetailData>(
@@ -62,6 +67,18 @@ const controlActions = computed(() => {
 
 const articleId = computed(() => route.params.id);
 
+interface Catalog {
+  id: string;
+  text: string;
+  level: number;
+  line: number;
+  top?: number;
+}
+const catalog = ref<Catalog[]>([]);
+function getCatalog(mdCatalog: any[]) {
+  catalog.value = mdCatalog;
+}
+
 watch(
   () => articleId.value,
   () => {
@@ -75,8 +92,6 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-@import './rich-html.less'; /* 或直接复制粘贴样式到 scoped 样式中 */
-
 .article {
   width: 100%;
   background-color: var(--el-color-info-light-9);
@@ -101,26 +116,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-
-  .article-content {
-    :deep(img) {
-      max-width: 100%;
-    }
-
-    :deep(blockquote) {
-      margin: 1.2em 0;
-      padding: 0.8em 1em;
-      border-left: 2px solid #3498db;
-      background-color: #ecf0f1;
-      color: #333;
-      border-radius: 4px;
-    }
-
-    :deep(a) {
-      color: var(--el-color-primary);
-      text-decoration: none;
-    }
   }
 
   .next-pre-control {

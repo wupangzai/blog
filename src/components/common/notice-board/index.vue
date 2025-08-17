@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-board" v-if="isShowNotice">
+  <div class="notice-board" v-if="isShowNotice && props.noticeHtml">
     <img :src="noticeSvg" alt="" />
     <div v-html="noticeHtmlWithPrefix" class="notice-content"></div>
     <el-icon class="close-icon" @click="closeNotice"><Close /></el-icon>

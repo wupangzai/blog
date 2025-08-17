@@ -36,7 +36,7 @@ const noticeHtml = ref('');
 async function getNotice() {
   const res = await API.Notice.getNotice();
   if (res) {
-    noticeHtml.value = res.data.content;
+    noticeHtml.value = res.data?.content;
   }
 }
 

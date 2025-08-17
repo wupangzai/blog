@@ -6,11 +6,16 @@
       </div>
       <div class="article-content-container">
         <article-header :article-detail="articleDetail" class="article-header" />
-        <div class="article-content" v-html="articleDetail.content"></div>
+        <md-preview
+          class="article-content"
+          :model-value="articleDetail.content"
+          :code-foldable="false"
+          @get-catalog="getCatalog"
+        />
         <last-edit :update-time="articleDetail.updateTime" />
       </div>
       <div class="article-toc">
-        <article-toc class="sticky-class" :article-detail="articleDetail" />
+        <article-toc class="sticky-class" :article-detail="articleDetail" :catalog="catalog" />
       </div>
     </div>
   </div>
@@ -26,6 +31,7 @@ import wikiNav from '@/components/wiki-detail/wiki-nav/index.vue';
 import articleHeader from '../article/article-header.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import articleToc from '@/components/article/article-toc/index.vue';
+import { MdPreview } from 'md-editor-v3';
 
 const route = useRoute();
 const wikiCatalogList = ref<WikiType.CatalogListItem[]>([]);
@@ -47,6 +53,18 @@ async function getArticleDetail() {
   if (res) {
     articleDetail.value = res;
   }
+}
+
+interface Catalog {
+  id: string;
+  text: string;
+  level: number;
+  line: number;
+  top?: number;
+}
+const catalog = ref<Catalog[]>([]);
+function getCatalog(mdCatalog: any[]) {
+  catalog.value = mdCatalog;
 }
 
 onMounted(() => {
