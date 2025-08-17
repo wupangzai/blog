@@ -16,13 +16,17 @@
       <el-form-item label="内容" :error="content.errMsg" :required="content.required">
         <md-editor
           v-model="content.value"
+          @onUploadImg="uploadImg"
           :preview="true"
+          :editable="true"
+          :preview-only="false"
           :toolbars="[
             'bold', // 粗体
             'underline', // 下划线
             'italic', // 斜体
             'strikeThrough', // 删除线
             'title', // 标题（H1~H6）
+            'image', // 图片上传
             'sub', // 下标
             'sup', // 上标
             'quote', // 引用
@@ -32,7 +36,6 @@
             'codeRow', // 行内代码
             'code', // 代码块
             'link', // 超链接
-            'image', // 图片上传
             'table', // 表格
             'mermaid', // Mermaid 图表
             'katex', // 数学公式
@@ -194,6 +197,17 @@ async function submit() {
     } as unknown as AdminArticleType.PublishArticleApiPayload;
     emits('update:visible', 'confirm', resolveValue);
   }
+}
+
+async function uploadImg(files: File[], callback: (urls: string[]) => void) {
+  const uploadedUrls = await Promise.all(
+    files.map(async (file) => {
+      const res = await API.AdminWiki.adminUploadfile(file as any);
+      return res?.data.url ?? '';
+    })
+  );
+
+  callback(uploadedUrls);
 }
 
 onMounted(() => {
