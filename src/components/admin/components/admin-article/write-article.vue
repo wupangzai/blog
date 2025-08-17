@@ -51,7 +51,7 @@
             '-',
             '=', // 分隔符（竖线/换行）
           ]"
-          :preview-theme="'vuepress'"
+          preview-theme="cyanosis"
           :code-foldable="false"
           :code-expand="true"
           :code-theme="'github'"

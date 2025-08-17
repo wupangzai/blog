@@ -6,6 +6,7 @@
         <md-preview
           :model-value="articleDetail.content"
           :code-foldable="false"
+          preview-theme="cyanosis"
           @get-catalog="getCatalog"
         />
         <last-edit :update-time="articleDetail.updateTime" />

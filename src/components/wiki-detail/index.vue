@@ -83,8 +83,6 @@ watch(
 </script>
 
 <style lang="less" scoped>
-@import '../article/rich-html.less'; /* 或直接复制粘贴样式到 scoped 样式中 */
-
 .wiki-detail {
   position: relative;
   width: 100%;
