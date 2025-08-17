@@ -63,7 +63,6 @@ onMounted(() => {
   gap: 20px;
   .wiki-list-content {
     display: flex;
-    justify-content: space-between;
     gap: 24px;
     flex-wrap: wrap;
     .wiki-card-item {
