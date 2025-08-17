@@ -3,6 +3,7 @@
     <notice-board :noticeHtml="noticeHtml" />
     <div class="wiki-list-content">
       <wiki-card
+        class="wiki-card-item"
         v-for="cardItem in wikiList"
         :key="cardItem.id"
         :card-item="cardItem"
@@ -63,6 +64,12 @@ onMounted(() => {
   .wiki-list-content {
     display: flex;
     justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    .wiki-card-item {
+      flex: 1 1 calc((100% - 48px) / 3); /* 3个一行，gap为24px × 2 = 48px */
+      max-width: calc((100% - 48px) / 3);
+    }
   }
 }
 </style>
