@@ -72,6 +72,7 @@ const footerList = [
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
       max-height: 192px;
+      height: 192px;
     }
   }
 
