@@ -97,8 +97,9 @@ watch(
     width: 100%;
     min-height: calc(100vh - 68px);
 
-    background-color: #fff;
+    // background-color: #fff;
     display: flex;
+    justify-content: center;
 
     .content-nav {
       border: 1px solid var(--el-color-info-light-9);
@@ -116,6 +117,7 @@ watch(
       }
     }
     .article-toc {
+      padding-left: 12px;
       width: 280px;
     }
   }
