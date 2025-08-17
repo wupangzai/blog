@@ -34,6 +34,16 @@ export interface updateIsShowApi {
   success: boolean;
 }
 
+export interface AddNoticeApiPayload {
+  content: string;
+  isShow: boolean;
+}
+
+export interface AddNoticeApi {
+  data: null;
+  success: boolean;
+}
+
 export interface UpdateNoticeApiPayload {
   content: string;
   id: number;

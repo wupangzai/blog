@@ -36,6 +36,15 @@ export async function deleteNotice(id: number) {
   }
 }
 
+export async function addNotice(payload: AdminNoticeType.AddNoticeApiPayload) {
+  try {
+    const res = await http.postJson<AdminNoticeType.AddNoticeApi>('/api/admin/notice/add', payload);
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export async function updateNotice(payload: AdminNoticeType.UpdateNoticeApiPayload) {
   try {
     const res = await http.postJson<AdminNoticeType.UpdateNoticeApi>(

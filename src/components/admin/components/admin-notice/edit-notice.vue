@@ -1,9 +1,9 @@
 <template>
   <el-form class="edit-notice">
-    <el-form-item label="分类名称" :required="input.required" :error="input.errMsg">
+    <el-form-item label="公告内容" :required="input.required" :error="input.errMsg">
       <el-input
         v-model="input.value"
-        placeholder="请输入分类名称"
+        placeholder="请输入公告内容"
         size="large"
         type="textarea"
         :rows="8"
@@ -22,12 +22,12 @@ import { Form, useRule } from '@/hooks/form-hooks';
 import type { AdminNoticeType } from '@/api/types';
 
 interface Props {
-  noticeRow: AdminNoticeType.AdminNoticeListItem;
+  noticeRow?: AdminNoticeType.AdminNoticeListItem;
 }
 
 const props = defineProps<Props>();
 
-const input = useRule(props.noticeRow.content);
+const input = useRule(props.noticeRow?.content && '');
 
 const emits = defineEmits<{
   (e: 'update:visible', closeType: string, resolveValue?: string): void;

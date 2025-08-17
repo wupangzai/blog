@@ -10,6 +10,12 @@
       :total="tableTotalCount"
       :row-style="{ height: '50px' }"
     >
+      <template #table-header>
+        <el-button :icon="Plus" type="primary" @click="operateTableActions('add', 0)"
+          >新增</el-button
+        >
+      </template>
+
       <template #default="{ row, column, index }">
         <span v-if="column.property === 'index'">{{ index + 1 }}</span>
 
@@ -57,7 +63,7 @@ import { isShowOptionList } from './const';
 import { useDialog, useDoubleConifrm } from '@/hooks';
 import circleIcon from '@/components/admin/components/admin-article/circle-icon.vue';
 import { ElNotification } from 'element-plus';
-import { Close, Check } from '@element-plus/icons-vue';
+import { Close, Check, Plus } from '@element-plus/icons-vue';
 import editNotice from './edit-notice.vue';
 
 const tableRef = ref<InstanceType<typeof tableWithSearch> | null>(null);
@@ -147,6 +153,29 @@ async function operateTableActions(
     if (success) {
       ElNotification({
         message: '修改成功',
+        type: 'success',
+      });
+    }
+  }
+
+  if (actionType === 'add') {
+    const resolveValue = await useDialog({
+      content: editNotice,
+      dialogProps: {
+        title: '新增公告',
+        width: '650',
+        showClose: true,
+      },
+    });
+    const payload = {
+      content: resolveValue,
+      isShow: false,
+    };
+    const success = (await API.AdminNotice.addNotice(payload))?.success;
+
+    if (success) {
+      ElNotification({
+        message: '新增成功',
         type: 'success',
       });
     }
