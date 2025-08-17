@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 
-const tocList = ref<{ id: string; text: string; level: number; line: number; top?: number }[]>([]);
+const tocList = ref<{ id: string; text: string; level: number; line: number }[]>([]);
 const activeId = ref('');
 const manualScroll = ref(false);
 
@@ -45,52 +45,48 @@ const props = defineProps<{
 // 转换 catalog 为 tocList 并生成唯一 id
 watch(
   () => props.catalog,
-  async () => {
+  () => {
     tocList.value = props.catalog.map((item, index) => ({
       id: `toc-${index}`,
       text: item.text.trim(),
       level: item.level,
       line: item.line,
     }));
-
-    await nextTick();
-    calculateTocTop();
   },
   { immediate: true, deep: true }
 );
 
-// 根据 data-line 映射真实 top
-function calculateTocTop() {
-  tocList.value.forEach((item) => {
-    const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement;
-    if (el) {
-      item.top = el.offsetTop;
-    }
-  });
-}
-
+// 点击 TOC 滚动到标题顶部（带偏移）
 function scrollToHeading(id: string) {
   const item = tocList.value.find((i) => i.id === id);
-  if (!item || item.top === undefined) return;
+  if (!item) return;
 
-  const offset = 80;
+  const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement;
+  if (!el) return;
+
+  const offset = 80; // 顶部留白
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+
   manualScroll.value = true;
-  window.scrollTo({ top: item.top - offset, behavior: 'smooth' });
+  window.scrollTo({ top, behavior: 'smooth' });
   activeId.value = id;
 
+  // 1 秒后允许自动高亮更新
   setTimeout(() => (manualScroll.value = false), 1000);
 }
 
+// 自动高亮当前可视区标题
 function updateActiveId() {
   if (manualScroll.value) return;
 
   for (const item of tocList.value) {
-    if (item.top !== undefined) {
-      const top = item.top - window.scrollY;
-      if (top >= 0 && top < 100) {
-        activeId.value = item.id;
-        break;
-      }
+    const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement;
+    if (!el) continue;
+
+    const top = el.getBoundingClientRect().top;
+    if (top >= 0 && top < 100) {
+      activeId.value = item.id;
+      break;
     }
   }
 }
