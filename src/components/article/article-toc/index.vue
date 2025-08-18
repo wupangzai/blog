@@ -34,7 +34,6 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 
 const tocList = ref<{ id: string; text: string; level: number; line: number }[]>([]);
 const activeId = ref('');
-const prevActiveId = ref(''); // ✅ 记录上一次的 activeId，防止重复滚动目录
 const manualScroll = ref(false);
 
 const props = defineProps<{
@@ -54,28 +53,6 @@ watch(
   { immediate: true, deep: true }
 );
 
-// ✅ 让目录项在容器中“居中显示”，且只在 active 变化时触发
-function scrollTocIntoCenter(behavior: ScrollBehavior = 'auto') {
-  const container = document.querySelector('.toc-container') as HTMLElement | null;
-  const activeLink = document.querySelector('.toc-container li a.active') as HTMLElement | null;
-  if (!container || !activeLink) return;
-
-  // 以 li 为单位更稳
-  const li = activeLink.closest('li') as HTMLElement | null;
-  const target = li ?? activeLink;
-
-  const targetTop = target.offsetTop;
-  const targetCenter = targetTop + target.clientHeight / 2;
-  const scrollTop = Math.max(0, targetCenter - container.clientHeight / 2);
-
-  // 只在必要时滚动，避免抖动
-  const delta = Math.abs(container.scrollTop - scrollTop);
-  if (delta > 8) {
-    container.scrollTo({ top: scrollTop, behavior });
-  }
-}
-
-// 点击目录滚到正文
 function scrollToHeading(id: string) {
   const item = tocList.value.find((i) => i.id === id);
   if (!item) return;
@@ -83,47 +60,55 @@ function scrollToHeading(id: string) {
   const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement | null;
   if (!el) return;
 
-  const offset = 80; // 顶部留白
+  const offset = 80;
   const top = el.getBoundingClientRect().top + window.scrollY - offset;
 
-  manualScroll.value = true;
+  manualScroll.value = true; // 开始手动滚动，屏蔽滚动高亮
+  activeId.value = id; // 高亮立即更新
   window.scrollTo({ top, behavior: 'smooth' });
-  activeId.value = id;
 
-  // 目录同步，但用 auto 可减少干扰（也可改 'smooth'）
-  scrollTocIntoCenter('auto');
-
-  setTimeout(() => (manualScroll.value = false), 300);
+  // 500ms 后恢复文章滚动监听（可根据滚动距离调整）
+  setTimeout(() => {
+    manualScroll.value = false;
+  }, 1500);
 }
 
-// 根据滚动更新高亮
 function updateActiveId() {
-  if (manualScroll.value) return;
+  if (manualScroll.value) return; // 屏蔽滚动时更新高亮
 
-  // 选中“已越过顶部偏移”的最后一个标题，更贴近预期
   const offset = 100;
   let candidate = '';
   for (const item of tocList.value) {
     const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement | null;
     if (!el) continue;
-    const top = el.getBoundingClientRect().top;
-    if (top <= offset) {
-      candidate = item.id; // 持续更新到“最后一个越过阈值”的标题
-    } else {
-      break; // 后面的标题都更靠下了
-    }
+    if (el.getBoundingClientRect().top <= offset) candidate = item.id;
+    else break;
   }
-  // 如果没有越过阈值，就选第一个
+
   if (!candidate && tocList.value.length) candidate = tocList.value[0].id;
 
   if (candidate && candidate !== activeId.value) {
     activeId.value = candidate;
+    scrollTocIntoCenter(); // 仅外层滚动时目录居中
+  }
+}
 
-    // ✅ 只有在 active 实际变化时才滚动目录，且用 'auto' 防止与主滚动冲突
-    if (activeId.value !== prevActiveId.value) {
-      scrollTocIntoCenter('auto');
-      prevActiveId.value = activeId.value;
-    }
+// toc 居中滚动
+function scrollTocIntoCenter(behavior: ScrollBehavior = 'auto') {
+  const container = document.querySelector('.toc-container') as HTMLElement | null;
+  const activeLink = document.querySelector('.toc-container li a.active') as HTMLElement | null;
+  if (!container || !activeLink) return;
+
+  const li = activeLink.closest('li') as HTMLElement | null;
+  const target = li ?? activeLink;
+
+  const targetTop = target.offsetTop;
+  const targetCenter = targetTop + target.clientHeight / 2;
+  const scrollTop = Math.max(0, targetCenter - container.clientHeight / 2);
+
+  const delta = Math.abs(container.scrollTop - scrollTop);
+  if (delta > 8) {
+    container.scrollTo({ top: scrollTop, behavior });
   }
 }
 
