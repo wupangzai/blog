@@ -128,6 +128,26 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
   font-size: 14px;
   max-height: 85vh;
   overflow-y: auto;
+  /* 滚动条微调 */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(52, 152, 219, 0.4) transparent; /* Firefox */
+}
+/* Webkit 浏览器滚动条 */
+.toc-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.toc-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-container::-webkit-scrollbar-thumb {
+  background-color: rgba(52, 152, 219, 0.4);
+  border-radius: 3px;
+}
+
+.toc-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(52, 152, 219, 0.6);
 }
 .toc-container ul {
   list-style: none;
