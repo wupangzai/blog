@@ -50,6 +50,7 @@
             'catalog', // 目录（滚动用）
             '-',
             '=', // 分隔符（竖线/换行）
+            0,
           ]"
           preview-theme="cyanosis"
           :code-foldable="false"
@@ -59,7 +60,13 @@
           style="height: 60vh"
           :show-toc="true"
           toc-nav-position="right"
-        />
+        >
+          <template #defToolbars>
+            <el-icon>
+              <Download @click="exportMd" />
+            </el-icon>
+          </template>
+        </md-editor>
       </el-form-item>
 
       <el-form-item label="封面" :error="cover.errMsg" :required="cover.required">
@@ -113,6 +120,7 @@ import upload from '@/components/common/upload/index.vue';
 import type { AdminArticleType } from '@/api/types';
 import API from '@/api';
 import { Form } from '@/hooks/form-hooks';
+import { Download } from '@element-plus/icons-vue';
 
 const uploadOptions = {
   uploadHeight: 100,
@@ -209,6 +217,24 @@ async function uploadImg(files: File[], callback: (urls: string[]) => void) {
 
   callback(uploadedUrls);
 }
+
+function exportMd() {
+  const blob = new Blob([content.value.value], { type: 'text/markdown;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = `${title.value.value}.md`;
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 自定义按钮 VNode
 
 onMounted(() => {
   getSelectList();
