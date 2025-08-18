@@ -27,7 +27,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const input = useRule(props.noticeRow?.content && '');
+const input = useRule(props.noticeRow?.content ?? '');
 
 const emits = defineEmits<{
   (e: 'update:visible', closeType: string, resolveValue?: string): void;
