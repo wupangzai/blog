@@ -89,7 +89,7 @@ watch(
   width: 100%;
   min-height: calc(100vh - 68px);
   background-color: var(--el-color-info-light-9);
-  padding: 0 4% 0 8%;
+  padding: 0 4% 0 6%;
   border-top: 1px solid var(--el-color-info-light-9);
 
   .wiki-detail-content {
@@ -106,17 +106,18 @@ watch(
     }
 
     .article-content-container {
-      flex: 1;
       :deep(.article-header) {
+        max-width: 940px;
         justify-content: flex-start;
       }
 
       .article-content {
+        max-width: 940px;
         padding: 8px 12px 8px 24px;
       }
     }
     .article-toc {
-      padding-left: 12px;
+      padding-left: 16px;
       width: 280px;
     }
   }

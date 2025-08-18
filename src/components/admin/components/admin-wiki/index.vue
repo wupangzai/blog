@@ -229,7 +229,7 @@ async function operateTableActions(actionType: string, id: number, toggleOption 
   }
 
   if (actionType === 'delete') {
-    await useDoubleConifrm({ content: '是否确定要删除该文章？' });
+    await useDoubleConifrm({ content: '是否确定要删除该知识库？' });
 
     const success = (await API.AdminWiki.deleteArticle(id))?.success;
     if (success) {
