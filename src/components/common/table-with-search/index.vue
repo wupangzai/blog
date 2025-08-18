@@ -87,13 +87,11 @@ const pages = ref<Pages>({
 });
 
 const modelValue = defineModel<SearchListItem[]>({ default: () => [] });
-console.log('[ modelValue ] >', modelValue);
 
 const emits = defineEmits<{
   (e: 'search', payload?: any): void;
 }>();
 function search() {
-  console.log('[ 1 ] >');
   const pagesWithSearchParams = {
     ...Object.fromEntries(modelValue.value.map((item) => [item.prop, item.value])),
     ...pages.value,

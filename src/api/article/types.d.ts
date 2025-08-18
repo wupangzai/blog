@@ -3,7 +3,7 @@ import { TagsCardType, CommonType } from '@/api/types';
 export interface Page {
   current: number;
   page: number;
-  size: number;
+  size?: number;
   total: number;
 }
 

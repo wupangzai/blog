@@ -14,11 +14,11 @@
       <div class="total">共{{ page.total }}篇文章</div>
       <el-pagination
         background
-        v-model="page.current"
-        layout="prev, pager, next"
+        v-model:current-page="page.current"
+        layout="sizes, prev, pager, next, jumper"
         :total="page.total"
-        :page-size="page.size"
-        @current-change="(current: number) => getArticleList(current)"
+        v-model:page-size="page.size"
+        @change="getArticleList"
       />
     </div>
   </div>
@@ -40,23 +40,21 @@ async function getNotice() {
   }
 }
 
-const page = ref({
+const page = ref<ArticleType.Page>({
   current: 1,
   page: 1,
-  size: 10,
   total: 0,
+  size: 10,
 });
 
 const articleList = ref<ArticleType.ArticleItem[]>([]);
-async function getArticleList(current = 1) {
-  page.value.current = current;
+async function getArticleList() {
   const res = await API.Article.getArticleList(page.value);
   if (res) {
     articleList.value = res.data;
     page.value = {
       current: res.current,
       page: res.page,
-      size: res.size,
       total: res.total,
     };
   }
