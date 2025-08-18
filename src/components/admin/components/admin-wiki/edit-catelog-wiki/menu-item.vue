@@ -5,6 +5,12 @@
         <div v-html="modelValue.title" class="item-class" v-if="!modelValue.editing"></div>
         <el-input v-else v-model="modelValue.title" />
         <div class="custom-menu-item-btns">
+          <el-icon class="icon" @click="moveItem('up')" v-if="isShowItemUpIcon">
+            <Top />
+          </el-icon>
+          <el-icon class="icon" @click="moveItem('down')" v-if="isShowItemdownIcon">
+            <Bottom />
+          </el-icon>
           <el-icon class="icon" @click="editmenuItem">
             <EditPen />
           </el-icon>
@@ -67,6 +73,8 @@
       @delete="emits('delete', subItem.id)"
       @move="(id, type) => emits('move', id, type)"
       @add-article="(id, resolveValue) => emits('addArticle', id, resolveValue)"
+      @move-item="(id, type) => emits('moveItem', id, type)"
+      :children-length="props.childrenLength"
     />
   </el-sub-menu>
 </template>
@@ -81,6 +89,7 @@ import addArticleComponent from './add-article.vue';
 
 interface Props {
   total: number;
+  childrenLength: number;
 }
 
 const props = defineProps<Props>();
@@ -108,6 +117,18 @@ async function deleteSubMenu() {
   emits('delete', modelValue.value.id);
 }
 
+function moveItem(type: MoveType) {
+  emits('moveItem', modelValue.value.id, type);
+}
+
+const isShowItemUpIcon = computed(() => {
+  return modelValue.value.sort !== 1;
+});
+
+const isShowItemdownIcon = computed(() => {
+  return modelValue.value.sort !== props.childrenLength;
+});
+
 async function addArticle() {
   const resolveValue = (await useDialog({
     content: addArticleComponent,
@@ -133,6 +154,7 @@ const emits = defineEmits<{
   (e: 'delete', id: number): void;
   (e: 'move', id: number, type: MoveType): void;
   (e: 'addArticle', id: number, resolveValue: AdminWikiType.AdminWikiCatelogItem[]): void;
+  (e: 'moveItem', id: number, type: MoveType): void;
 }>();
 </script>
 

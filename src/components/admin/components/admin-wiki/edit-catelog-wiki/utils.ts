@@ -107,3 +107,49 @@ export function addItemsToChildrenById(
 
   return recursive(list);
 }
+
+export function moveItemByIdInChildren(
+  list: AdminWikiType.AdminWikiCatelogItem[],
+  idToMove: number,
+  moveType: 'up' | 'down'
+): AdminWikiType.AdminWikiCatelogItem[] {
+  // 在某一层级移动元素，并重新维护 sort
+  const moveInArray = (
+    arr: AdminWikiType.AdminWikiCatelogItem[],
+    index: number,
+    direction: 'up' | 'down'
+  ) => {
+    const newArr = [...arr];
+    if (direction === 'up' && index > 0) {
+      [newArr[index - 1], newArr[index]] = [newArr[index], newArr[index - 1]];
+    }
+    if (direction === 'down' && index < arr.length - 1) {
+      [newArr[index + 1], newArr[index]] = [newArr[index], newArr[index + 1]];
+    }
+
+    // 重新设置 sort
+    return newArr.map((item, i) => ({
+      ...item,
+      sort: i + 1,
+    }));
+  };
+
+  // 递归查找
+  const recursive = (
+    items: AdminWikiType.AdminWikiCatelogItem[]
+  ): AdminWikiType.AdminWikiCatelogItem[] => {
+    const index = items.findIndex((item) => item.id === idToMove);
+    if (index !== -1) {
+      // 找到了，执行移动
+      return moveInArray(items, index, moveType);
+    }
+
+    // 没找到，递归 children
+    return items.map((item) => ({
+      ...item,
+      children: item.children?.length ? recursive(item.children) : item.children,
+    }));
+  };
+
+  return recursive(list);
+}

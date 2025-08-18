@@ -12,6 +12,8 @@
         @delete="deleteMenuItem"
         @move="moveSubMenu"
         @add-article="AddArticleFn"
+        @move-item="moveItem"
+        :children-length="item.children.length || 0"
       />
     </el-menu>
 
@@ -36,6 +38,7 @@ import {
   removeItemByIdFromChildren,
   moveItemByIdFromChildren,
   addItemsToChildrenById,
+  moveItemByIdInChildren,
 } from './utils';
 
 interface Props {
@@ -130,6 +133,10 @@ async function submit() {
   };
 
   emits('update:visible', 'confirm', payload);
+}
+
+function moveItem(id: number, type: MoveType) {
+  adminWikiCatelogList.value = moveItemByIdInChildren(adminWikiCatelogList.value, id, type);
 }
 
 const emits = defineEmits<{
