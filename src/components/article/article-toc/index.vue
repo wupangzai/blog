@@ -11,14 +11,12 @@
           position: 'relative',
         }"
       >
-        <!-- 左边进度条 -->
         <span
           class="progress-bar"
           :class="{ active: activeId === item.id }"
           :style="{ left: `${5}px` }"
         ></span>
 
-        <!-- 目录链接 -->
         <a
           href="javascript:void(0)"
           :class="{ active: activeId === item.id }"
@@ -36,13 +34,13 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 
 const tocList = ref<{ id: string; text: string; level: number; line: number }[]>([]);
 const activeId = ref('');
+const prevActiveId = ref(''); // ✅ 记录上一次的 activeId，防止重复滚动目录
 const manualScroll = ref(false);
 
 const props = defineProps<{
   catalog: { text: string; level: number; line: number }[];
 }>();
 
-// 转换 catalog 为 tocList 并生成唯一 id
 watch(
   () => props.catalog,
   () => {
@@ -56,12 +54,33 @@ watch(
   { immediate: true, deep: true }
 );
 
-// 点击 TOC 滚动到标题顶部（带偏移）
+// ✅ 让目录项在容器中“居中显示”，且只在 active 变化时触发
+function scrollTocIntoCenter(behavior: ScrollBehavior = 'auto') {
+  const container = document.querySelector('.toc-container') as HTMLElement | null;
+  const activeLink = document.querySelector('.toc-container li a.active') as HTMLElement | null;
+  if (!container || !activeLink) return;
+
+  // 以 li 为单位更稳
+  const li = activeLink.closest('li') as HTMLElement | null;
+  const target = li ?? activeLink;
+
+  const targetTop = target.offsetTop;
+  const targetCenter = targetTop + target.clientHeight / 2;
+  const scrollTop = Math.max(0, targetCenter - container.clientHeight / 2);
+
+  // 只在必要时滚动，避免抖动
+  const delta = Math.abs(container.scrollTop - scrollTop);
+  if (delta > 8) {
+    container.scrollTo({ top: scrollTop, behavior });
+  }
+}
+
+// 点击目录滚到正文
 function scrollToHeading(id: string) {
   const item = tocList.value.find((i) => i.id === id);
   if (!item) return;
 
-  const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement;
+  const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement | null;
   if (!el) return;
 
   const offset = 80; // 顶部留白
@@ -71,22 +90,39 @@ function scrollToHeading(id: string) {
   window.scrollTo({ top, behavior: 'smooth' });
   activeId.value = id;
 
-  // 1 秒后允许自动高亮更新
-  setTimeout(() => (manualScroll.value = false), 1000);
+  // 目录同步，但用 auto 可减少干扰（也可改 'smooth'）
+  scrollTocIntoCenter('auto');
+
+  setTimeout(() => (manualScroll.value = false), 300);
 }
 
-// 自动高亮当前可视区标题
+// 根据滚动更新高亮
 function updateActiveId() {
   if (manualScroll.value) return;
 
+  // 选中“已越过顶部偏移”的最后一个标题，更贴近预期
+  const offset = 100;
+  let candidate = '';
   for (const item of tocList.value) {
-    const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement;
+    const el = document.querySelector(`[data-line='${item.line}']`) as HTMLElement | null;
     if (!el) continue;
-
     const top = el.getBoundingClientRect().top;
-    if (top >= 0 && top < 100) {
-      activeId.value = item.id;
-      break;
+    if (top <= offset) {
+      candidate = item.id; // 持续更新到“最后一个越过阈值”的标题
+    } else {
+      break; // 后面的标题都更靠下了
+    }
+  }
+  // 如果没有越过阈值，就选第一个
+  if (!candidate && tocList.value.length) candidate = tocList.value[0].id;
+
+  if (candidate && candidate !== activeId.value) {
+    activeId.value = candidate;
+
+    // ✅ 只有在 active 实际变化时才滚动目录，且用 'auto' 防止与主滚动冲突
+    if (activeId.value !== prevActiveId.value) {
+      scrollTocIntoCenter('auto');
+      prevActiveId.value = activeId.value;
     }
   }
 }
@@ -95,7 +131,7 @@ function onScroll() {
   requestAnimationFrame(updateActiveId);
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll));
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }));
 onUnmounted(() => window.removeEventListener('scroll', onScroll));
 </script>
 
@@ -137,7 +173,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
     background-color 0.3s,
     height 0.3s;
 }
-
 .progress-bar.active {
   top: 4px;
   bottom: 4px;
