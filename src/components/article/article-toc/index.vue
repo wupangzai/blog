@@ -6,7 +6,7 @@
         v-for="item in tocList"
         :key="item.id"
         :style="{
-          paddingLeft: `${(item.level - 1) * 16 + 8}px`,
+          paddingLeft: `${item.level * 16}px`,
           margin: '6px',
           position: 'relative',
         }"
