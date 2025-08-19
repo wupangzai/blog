@@ -89,7 +89,7 @@ watch(
   width: 100%;
   min-height: calc(100vh - 68px);
   background-color: var(--el-color-info-light-9);
-  padding: 0 4% 0 6%;
+  padding: 0 4% 0 3%;
   border-top: 1px solid var(--el-color-info-light-9);
 
   .wiki-detail-content {
