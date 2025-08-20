@@ -42,7 +42,7 @@
   & .content-title {
     font-weight: 600;
     font-size: 24px;
-    color: rgb(76, 78, 77);
+    color: var(--custom-header-color);
   }
 }
 </style>

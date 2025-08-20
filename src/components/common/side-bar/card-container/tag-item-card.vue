@@ -47,7 +47,7 @@ function clickTag() {
   cursor: pointer;
 
   .tag-name {
-    color: #4c4e4d;
+    color: var(--custom-tag-color);
   }
 
   .tag-count {
@@ -60,18 +60,18 @@ function clickTag() {
   }
 
   &:hover {
-    background-color: #e5e7eb;
+    background-color: var(--custom-hover-bg-color);
   }
 }
 
 .tag-item-card.is-label-type {
   .tag-name {
-    color: #03543f;
+    color: var(--custom-tag-green-color);
   }
-  background-color: #def7ec;
+  background-color: var(--custom-tag-green-bg-color);
 
   &:hover {
-    background-color: #bcf0da;
+    background-color: var(--custom-tag-green-hover-color);
   }
 }
 </style>

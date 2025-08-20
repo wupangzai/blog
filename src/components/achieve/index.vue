@@ -75,7 +75,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--custom-notice-bg-color);
     border-radius: 8px;
     border: 1px solid var(--el-color-info-light-7);
 
@@ -83,7 +83,7 @@ onMounted(() => {
       font-weight: 600;
       font-size: 18px;
       line-height: 28px;
-      color: #111827;
+      color: var(--custom-header-color);
     }
 
     .card-content {

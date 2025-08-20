@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
 <style lang="less" scoped>
 .article-header {
   width: 100%;
-  background-color: #fff;
+  background-color: var(--custom-notice-bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
       h1 {
         font-size: 36px;
       }
-      color: #4c4e4d;
+      color: var(--custom-tag-color);
       line-height: 40px;
       padding-bottom: 24px;
     }

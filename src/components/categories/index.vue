@@ -93,7 +93,7 @@ watch(
   flex-direction: column;
 }
 .categories {
-  background-color: #fff;
+  background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-7);
   padding: 10px 20px 28px 20px;
@@ -104,7 +104,7 @@ watch(
 .categories-list-content {
   width: 100%;
   min-height: 0;
-  background-color: #fff;
+  background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-7);
   padding: 20px;

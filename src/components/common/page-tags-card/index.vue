@@ -90,7 +90,7 @@ const icon = computed(() => (route.path === '/categories' ? categoriesSvg : labe
   }
 
   .foucs-tag-class {
-    background-color: #e0f2fe;
+    background-color: var(--custom-label-foucs-bg-color);
   }
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div class="operation-theme">
-    <el-switch v-model="switchChecked" class="custom-switch" :style="switchVars">
+    <el-switch
+      v-model="switchChecked"
+      class="custom-switch"
+      :style="switchVars"
+      @change="changeTheme"
+    >
       <template #active-action>
         <el-icon :color="getIconColor('Moon')"><Moon :class="getIconClass" /></el-icon>
       </template>
@@ -15,7 +20,8 @@
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import { computed, ref } from 'vue';
 
-const switchChecked = ref(false);
+const theme = localStorage.getItem('theme');
+const switchChecked = ref(theme === 'dark');
 
 type Icon = 'Moon' | 'Sunny';
 function getIconColor(icon: Icon) {
@@ -30,6 +36,20 @@ const getIconClass = computed(() => {
 const switchVars = computed(() => ({
   '--el-switch-button-color': switchChecked.value ? '#1A1A1A' : '#fff',
 }));
+
+function setTheme(type: 'light' | 'dark') {
+  document.documentElement.classList.remove('light', 'dark');
+
+  type === 'light'
+    ? document.documentElement.classList.add('light')
+    : document.documentElement.classList.add('dark');
+
+  localStorage.setItem('theme', type);
+}
+
+function changeTheme() {
+  switchChecked.value ? setTheme('dark') : setTheme('light');
+}
 </script>
 
 <style lang="less" scoped>

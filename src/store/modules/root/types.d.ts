@@ -4,12 +4,14 @@ import { Mutations_Const } from '@/store/modules/root/const';
 type RootState = {
   version: string;
   adminToken: string;
+  theme: string;
 };
 
 type GettersInRoot = Record<string, (...args: any[]) => any>;
 
 type MutationsInRoot = {
   [Mutations_Const.SET_ADMIN_TOKEN](state: RootState, token: string): void;
+  [Mutations_Const.SET_THEME](state: RootState, theme: string): void;
 };
 
 type ActionsInRoot = {

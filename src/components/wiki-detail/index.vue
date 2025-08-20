@@ -11,6 +11,7 @@
           :model-value="articleDetail.content"
           :code-foldable="false"
           preview-theme="cyanosis"
+          :theme="theme as Themes"
           @get-catalog="getCatalog"
         />
         <last-edit :update-time="articleDetail.updateTime" />
@@ -33,6 +34,9 @@ import articleHeader from '../article/article-header.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import articleToc from '@/components/article/article-toc/index.vue';
 import { MdPreview } from 'md-editor-v3';
+import type { Themes } from 'md-editor-v3';
+import { useStates } from '@/hooks';
+const { theme } = useStates(['theme']);
 
 const route = useRoute();
 const wikiCatalogList = ref<WikiType.CatalogListItem[]>([]);
@@ -109,10 +113,12 @@ watch(
       :deep(.article-header) {
         max-width: 940px;
         justify-content: flex-start;
+        margin-bottom: 12px;
       }
 
       .article-content {
         max-width: 940px;
+        background-color: var(--custom-article-bg-color);
         padding: 8px 12px 8px 24px;
       }
     }

@@ -38,7 +38,7 @@ function clickCard() {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--el-color-info-light-5);
-  background-color: #fff;
+  background-color: var(--custom-notice-bg-color);
 
   &:hover {
     cursor: pointer;

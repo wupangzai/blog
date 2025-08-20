@@ -12,6 +12,7 @@ import { Mutations_Const } from '@/store/modules/root/const';
 const rootState: RootState = {
   version: 'v2.0.0',
   adminToken: '',
+  theme: 'light',
 };
 
 const gettersInRoot: GettersInRoot = {};
@@ -19,6 +20,18 @@ const gettersInRoot: GettersInRoot = {};
 const mutationsInRoot: MutationsInRoot = {
   [Mutations_Const.SET_ADMIN_TOKEN](state, payload: string) {
     state.adminToken = payload;
+  },
+  [Mutations_Const.SET_THEME](state, payload: string) {
+    if (payload === 'admin') {
+      console.log('[ 456787 ] >', 456787);
+      state.theme = 'ligth';
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add('light');
+      return;
+    }
+    const theme = localStorage.getItem('theme') || payload;
+    state.theme = theme;
+    document.documentElement.classList.add(theme);
   },
 };
 

@@ -71,7 +71,7 @@ const isShowCard = computed(() => !(route.path === `/${props.type}`));
   width: 288px;
   //   height: 280px;
   padding: 20px;
-  background-color: #ffff;
+  background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-7);
 
@@ -101,13 +101,13 @@ const isShowCard = computed(() => !(route.path === `/${props.type}`));
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f3f4f6;
+      background-color: var(--custom-notice-bg-color);
       border-radius: 8px;
       color: #9ca3af;
 
       &:hover {
         cursor: pointer;
-        background-color: #e5e7eb;
+        background-color: var(--custom-notice-bg-color);
       }
     }
   }

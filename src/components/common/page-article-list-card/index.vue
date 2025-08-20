@@ -42,7 +42,7 @@ function clickCard() {
 
   &:hover {
     cursor: pointer;
-    background-color: rgb(243 244 246);
+    background-color: var(--custom-article-hover-bg-color);
   }
 
   .cover {

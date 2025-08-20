@@ -59,7 +59,7 @@ const footerList = [
   max-width: 450px;
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-5);
-  background-color: #fff;
+  // background-color: #fff;
 
   &:hover {
     cursor: pointer;

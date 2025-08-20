@@ -33,7 +33,7 @@ function closeNotice() {
 .notice-board {
   padding: 16px;
   height: 72px;
-  background-color: #f9fafb;
+  background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-5);
   font-size: 14px;

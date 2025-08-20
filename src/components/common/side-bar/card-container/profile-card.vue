@@ -45,7 +45,7 @@ const tagsMapList = computed(() => {
 .profile-card {
   width: 288px;
   padding: 20px 8px;
-  background-color: #ffff;
+  background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-7);
   display: flex;

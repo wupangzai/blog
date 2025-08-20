@@ -100,7 +100,7 @@ watch(
   .btn {
     cursor: pointer;
     padding: 4px 6px;
-    color: #333;
+    color: var(---custom-header-color);
 
     &.is-active {
       color: var(--el-color-primary);

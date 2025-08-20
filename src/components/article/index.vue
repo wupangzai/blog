@@ -7,6 +7,7 @@
           :model-value="articleDetail.content"
           :code-foldable="false"
           preview-theme="cyanosis"
+          :theme="theme as Themes"
           @get-catalog="getCatalog"
         />
         <last-edit :update-time="articleDetail.updateTime" />
@@ -39,6 +40,10 @@ import articleToc from '@/components/article/article-toc/index.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import nextArticle from '@/components/article/next-article/index.vue';
 import { MdPreview } from 'md-editor-v3';
+import type { Themes } from 'md-editor-v3';
+import { useStates } from '@/hooks';
+
+const { theme } = useStates(['theme']);
 
 const route = useRoute();
 const articleDetail = ref<ArticleType.ArticleDetailData>(
@@ -113,7 +118,7 @@ onMounted(() => {
     margin-right: 28px;
     border-radius: 8px;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--custom-article-bg-color);
     display: flex;
     flex-direction: column;
     gap: 10px;

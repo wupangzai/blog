@@ -120,9 +120,9 @@ onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }));
 onUnmounted(() => window.removeEventListener('scroll', onScroll));
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .toc-container {
-  background: #fff;
+  background: var(--custom-notice-bg-color);
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
@@ -156,7 +156,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
 }
 .toc-container a {
   text-decoration: none;
-  color: #444;
+  color: var(--custom-toc-a-color);
   display: block;
   padding: 4px 0;
   transition: all 0.2s;

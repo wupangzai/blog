@@ -58,7 +58,7 @@ const switchChecked = ref(false);
 .page-header {
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: var(--custom-header-bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
