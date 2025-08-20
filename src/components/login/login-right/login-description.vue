@@ -24,7 +24,7 @@
     .welcome {
       font-weight: 700;
       font-size: 36px;
-      color: #4c4e4d;
+      color: var(--custom-tag-color);
     }
     .info {
       width: 100%;
