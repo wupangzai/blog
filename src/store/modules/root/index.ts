@@ -18,20 +18,25 @@ const rootState: RootState = {
 const gettersInRoot: GettersInRoot = {};
 
 const mutationsInRoot: MutationsInRoot = {
-  [Mutations_Const.SET_ADMIN_TOKEN](state, payload: string) {
+  [Mutations_Const.SET_ADMIN_TOKEN](state, payload) {
     state.adminToken = payload;
   },
-  [Mutations_Const.SET_THEME](state, payload: string) {
-    if (payload === 'admin') {
-      console.log('[ 456787 ] >', 456787);
-      state.theme = 'ligth';
+  [Mutations_Const.SET_THEME](state, payload) {
+    let theme;
+    if (payload.theme === 'admin') {
+      theme = 'light';
       document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add('light');
+      document.documentElement.classList.add(theme);
       return;
     }
-    const theme = localStorage.getItem('theme') || payload;
+    payload.ignoreLocal
+      ? (theme = payload.theme)
+      : (theme = localStorage.getItem('theme') || payload.theme);
+
+    document.documentElement.classList.remove('light', 'dark');
     state.theme = theme;
     document.documentElement.classList.add(theme);
+    localStorage.setItem('theme', theme);
   },
 };
 

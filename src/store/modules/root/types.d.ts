@@ -11,7 +11,10 @@ type GettersInRoot = Record<string, (...args: any[]) => any>;
 
 type MutationsInRoot = {
   [Mutations_Const.SET_ADMIN_TOKEN](state: RootState, token: string): void;
-  [Mutations_Const.SET_THEME](state: RootState, theme: string): void;
+  [Mutations_Const.SET_THEME](
+    state: RootState,
+    payload: { theme: string; ignoreLocal: boolean }
+  ): void;
 };
 
 type ActionsInRoot = {

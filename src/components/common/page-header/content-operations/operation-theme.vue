@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useMutations } from '@/hooks';
 import { Sunny, Moon } from '@element-plus/icons-vue';
 import { computed, ref } from 'vue';
 
@@ -37,18 +38,11 @@ const switchVars = computed(() => ({
   '--el-switch-button-color': switchChecked.value ? '#1A1A1A' : '#fff',
 }));
 
-function setTheme(type: 'light' | 'dark') {
-  document.documentElement.classList.remove('light', 'dark');
-
-  type === 'light'
-    ? document.documentElement.classList.add('light')
-    : document.documentElement.classList.add('dark');
-
-  localStorage.setItem('theme', type);
-}
+const { SET_THEME } = useMutations(['SET_THEME']);
 
 function changeTheme() {
-  switchChecked.value ? setTheme('dark') : setTheme('light');
+  const theme = switchChecked.value ? 'dark' : 'light';
+  SET_THEME({ theme, ignoreLocal: true });
 }
 </script>
 

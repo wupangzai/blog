@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <!-- <canvas id="code-bg"></canvas> -->
+    <canvas id="code-bg" v-show="isShowCodeBg"></canvas>
 
     <div class="router-content" data-aos="fade-up">
       <router-view />
@@ -13,8 +13,15 @@
 
 <script lang="ts" setup>
 import sideBar from '@/components/common/side-bar/index.vue';
-// import { useCodeBg } from '@/hooks/use-code-bg';
-// useCodeBg();
+import { useStates } from '@/hooks';
+import { useCodeBg } from '@/hooks/use-code-bg';
+import { computed } from 'vue';
+
+const { theme } = useStates(['theme']);
+
+const isShowCodeBg = computed(() => theme.value === 'dark');
+
+useCodeBg();
 </script>
 
 <style lang="less" scoped>
