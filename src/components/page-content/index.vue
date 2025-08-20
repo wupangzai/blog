@@ -1,5 +1,7 @@
 <template>
   <div class="page-content">
+    <!-- <canvas id="code-bg"></canvas> -->
+
     <div class="router-content" data-aos="fade-up">
       <router-view />
     </div>
@@ -11,9 +13,20 @@
 
 <script lang="ts" setup>
 import sideBar from '@/components/common/side-bar/index.vue';
+// import { useCodeBg } from '@/hooks/use-code-bg';
+// useCodeBg();
 </script>
 
 <style lang="less" scoped>
+#code-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 .page-content {
   position: relative;
   width: 100%;
