@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <canvas id="code-bg" v-show="isShowCodeBg"></canvas>
+    <canvas id="code-bg" :style="{ visibility: isShowCodeBg ? 'visible' : 'hidden' }"></canvas>
 
     <div class="router-content" data-aos="fade-up">
       <router-view />
