@@ -68,7 +68,8 @@ const isShowCard = computed(() => !(route.path === `/${props.type}`));
 
 <style lang="less" scoped>
 .tags-card {
-  width: 288px;
+  width: 100%;
+  max-width: 288px;
   //   height: 280px;
   padding: 20px;
   background-color: var(--custom-notice-bg-color);
@@ -116,6 +117,18 @@ const isShowCard = computed(() => !(route.path === `/${props.type}`));
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .tags-card {
+    max-width: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .tags-card {
+    padding: 16px 12px;
   }
 }
 </style>

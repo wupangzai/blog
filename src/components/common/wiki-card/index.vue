@@ -77,4 +77,23 @@ function clickCard() {
     right: -8px;
   }
 }
+
+@media (max-width: 767px) {
+  .wiki-card {
+    &:hover {
+      transform: none;
+    }
+
+    .cover {
+      img {
+        height: 176px;
+        object-fit: cover;
+      }
+    }
+
+    .description {
+      padding: 16px 14px;
+    }
+  }
+}
 </style>

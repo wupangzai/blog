@@ -26,4 +26,12 @@
   .footer-right {
   }
 }
+
+@media (max-width: 767px) {
+  .search-dialog-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    line-height: 1.5;
+  }
+}
 </style>

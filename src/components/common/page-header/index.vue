@@ -73,4 +73,16 @@ const switchChecked = ref(false);
     width: 300px;
   }
 }
+
+@media (max-width: 960px) {
+  .page-header {
+    height: auto;
+    min-height: 68px;
+    padding: 10px 0;
+
+    .content-right {
+      width: 100%;
+    }
+  }
+}
 </style>

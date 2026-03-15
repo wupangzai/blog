@@ -126,6 +126,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 14px;
+  width: 100%;
   max-height: 85vh;
   overflow-y: auto;
   /* 滚动条微调 */
@@ -184,5 +185,12 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
   left: 4px !important;
   width: 4px;
   background-color: #3498db;
+}
+
+@media (max-width: 767px) {
+  .toc-container {
+    max-height: none;
+    padding: 12px;
+  }
 }
 </style>

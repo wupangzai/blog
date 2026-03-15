@@ -23,7 +23,7 @@ export async function useArticleSearch() {
   await useDialog({
     content: searchDialogContent,
     dialogProps: {
-      width: '640',
+      width: 'min(640px, calc(100vw - 24px))',
       showClose: false,
       closeOnClickModal: false,
       footer: false,

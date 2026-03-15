@@ -2,7 +2,7 @@
   <div class="content-operations">
     <operation-theme />
     <operation-search />
-    <operation-avatar :is-show-drop-down="true" v-bind="$attrs" />
+    <operation-avatar class="header-dropdown-avatar" :is-show-drop-down="true" v-bind="$attrs" />
   </div>
 </template>
 
@@ -17,5 +17,16 @@ import operationAvatar from './operation-avatar.vue';
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 960px) {
+  .content-operations {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .header-dropdown-avatar {
+    display: none;
+  }
 }
 </style>

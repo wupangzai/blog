@@ -71,12 +71,23 @@ function close() {
 
 <style lang="less" scoped>
 .search-dialog-content {
-  width: 600px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 
   :deep(.el-divider) {
     margin-left: -16px;
     margin-right: -16px;
     width: calc(100% + 32px);
+  }
+}
+
+@media (max-width: 767px) {
+  .search-dialog-content {
+    :deep(.page-article-list-card) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 </style>

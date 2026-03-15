@@ -1,6 +1,7 @@
 <template>
   <div class="home-page" data-aos="fade-up">
     <notice-board :noticeHtml="noticeHtml" />
+    <side-bar class="mobile-side-bar" />
     <div class="page-container">
       <list-page-card
         class="list-card"
@@ -31,6 +32,7 @@ import NoticeBoard from '@/components/common/notice-board/index.vue';
 import type { ArticleType } from '@/api/types';
 import listPageCard from './list-page-card.vue';
 import { useRouter } from 'vue-router';
+import sideBar from '@/components/common/side-bar/index.vue';
 
 const noticeHtml = ref('');
 async function getNotice() {
@@ -77,13 +79,17 @@ onMounted(() => {
   flex-direction: column;
   gap: 20px;
 
+  .mobile-side-bar {
+    display: none;
+  }
+
   .page-container {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 
     .list-card {
-      flex: 50%;
+      flex: 1 1 calc(50% - 8px);
     }
   }
 
@@ -95,6 +101,29 @@ onMounted(() => {
       color: var(--el-color-info);
       font-size: 14px;
       letter-spacing: 3px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .home-page {
+    gap: 16px;
+
+    .mobile-side-bar {
+      display: flex;
+    }
+
+    .page-container {
+      gap: 12px;
+
+      .list-card {
+        flex-basis: 100%;
+      }
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+      gap: 8px;
     }
   }
 }

@@ -35,6 +35,21 @@
     }
   }
 }
+
+@media (max-width: 960px) {
+  .header-content {
+    height: auto;
+    padding: 0 12px;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .content-left {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
 </style>
 
 <style lang="less">
@@ -43,6 +58,14 @@
     font-weight: 600;
     font-size: 24px;
     color: var(--custom-header-color);
+  }
+}
+
+@media (max-width: 767px) {
+  .content-left {
+    & .content-title {
+      font-size: 20px;
+    }
   }
 }
 </style>

@@ -56,6 +56,7 @@ const footerList = [
 <style lang="less" scoped>
 .list-page-card {
   position: relative;
+  width: 100%;
   max-width: 450px;
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-5);
@@ -111,6 +112,32 @@ const footerList = [
     position: absolute;
     top: -8px;
     right: -8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .list-page-card {
+    max-width: none;
+
+    &:hover {
+      transform: none;
+    }
+
+    .cover-img {
+      img {
+        height: 180px;
+        object-fit: cover;
+      }
+    }
+
+    .page-description {
+      padding: 16px 14px;
+
+      .tags,
+      .footer {
+        flex-wrap: wrap;
+      }
+    }
   }
 }
 </style>

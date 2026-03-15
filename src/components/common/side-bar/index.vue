@@ -1,15 +1,25 @@
 <template>
   <div class="side-bar">
-    <profile-card :profile="profile" :profile-statistics="profileStatistics" />
-    <tags-card
-      v-for="tagCard in tagsCardList"
-      :key="tagCard.type"
-      :type="tagCard.type"
-      :label="tagCard.label"
-      :icon="tagCard.icon"
-      :item-list="mapTagList(tagCard.type)!"
-      @arrow-click="listenArrowClick"
+    <profile-card
+      class="detail-extra-card"
+      :class="{ 'hide-on-mobile': props.mobileHideProfileCard }"
+      v-if="props.showProfileCard"
+      :profile="profile"
+      :profile-statistics="profileStatistics"
     />
+    <template v-if="props.showTagCards">
+      <tags-card
+        v-for="tagCard in tagsCardList"
+        :key="tagCard.type"
+        class="detail-extra-card"
+        :class="{ 'hide-on-mobile': isMobileHiddenTagCard(tagCard.type) }"
+        :type="tagCard.type"
+        :label="tagCard.label"
+        :icon="tagCard.icon"
+        :item-list="mapTagList(tagCard.type)!"
+        @arrow-click="listenArrowClick"
+      />
+    </template>
   </div>
 </template>
 
@@ -23,6 +33,20 @@ import { tagsCardList } from '@/components/common/side-bar/card-container/const'
 import type { CategoryListItem, TagListItem } from '@/api/tags-card/types';
 import type { Profile } from '@/api/types';
 import { useRouter } from 'vue-router';
+
+interface Props {
+  showProfileCard?: boolean;
+  showTagCards?: boolean;
+  mobileHideProfileCard?: boolean;
+  mobileHiddenTagTypes?: string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showProfileCard: true,
+  showTagCards: true,
+  mobileHideProfileCard: false,
+  mobileHiddenTagTypes: () => [],
+});
 
 const { profile } = useStates('commonModule', ['profile']);
 
@@ -56,6 +80,10 @@ function mapTagList(type: string) {
   return type === 'categories' ? categoriesList.value : tagsList.value;
 }
 
+function isMobileHiddenTagCard(type: string) {
+  return props.mobileHiddenTagTypes.includes(type);
+}
+
 const router = useRouter();
 function listenArrowClick(type: string) {
   router.push({
@@ -73,5 +101,13 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+@media (max-width: 767px) {
+  .side-bar {
+    .hide-on-mobile {
+      display: none;
+    }
+  }
 }
 </style>

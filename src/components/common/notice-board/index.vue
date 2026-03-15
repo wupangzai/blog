@@ -32,7 +32,7 @@ function closeNotice() {
 <style lang="less" scoped>
 .notice-board {
   padding: 16px;
-  height: 72px;
+  min-height: 72px;
   background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
   border: 1px solid var(--el-color-info-light-5);
@@ -60,6 +60,19 @@ function closeNotice() {
   :deep(a) {
     color: var(--el-color-primary); // 自定义颜色
     text-decoration: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .notice-board {
+    min-height: auto;
+    align-items: flex-start;
+    padding: 14px 12px;
+
+    .notice-content {
+      line-height: 1.6;
+      word-break: break-word;
+    }
   }
 }
 </style>

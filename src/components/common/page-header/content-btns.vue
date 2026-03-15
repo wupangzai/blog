@@ -116,4 +116,25 @@ watch(
     z-index: 1;
   }
 }
+
+@media (max-width: 960px) {
+  .content-btns {
+    width: 100%;
+    max-width: 420px;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+  }
+}
 </style>

@@ -129,4 +129,19 @@ watch(
     letter-spacing: 3px;
   }
 }
+
+@media (max-width: 767px) {
+  .categories {
+    padding: 12px;
+  }
+
+  .categories-list-content {
+    padding: 12px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
 </style>

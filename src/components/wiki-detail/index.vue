@@ -20,6 +20,7 @@
         <article-toc class="sticky-class" :article-detail="articleDetail" :catalog="catalog" />
       </div>
     </div>
+    <back-to-top />
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import wikiNav from '@/components/wiki-detail/wiki-nav/index.vue';
 import articleHeader from '../article/article-header.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import articleToc from '@/components/article/article-toc/index.vue';
+import backToTop from '@/components/common/back-to-top/index.vue';
 import { MdPreview } from 'md-editor-v3';
 import type { Themes } from 'md-editor-v3';
 import { useStates } from '@/hooks';
@@ -105,11 +107,15 @@ watch(
     justify-content: center;
 
     .content-nav {
+      width: 250px;
       border: 1px solid var(--el-color-info-light-9);
       padding: 12px;
     }
 
     .article-content-container {
+      flex: 1;
+      min-width: 0;
+
       :deep(.article-header) {
         max-width: 940px;
         justify-content: flex-start;
@@ -132,6 +138,65 @@ watch(
     position: sticky;
     top: 84px;
     right: 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .wiki-detail {
+    padding: 0 16px 24px;
+
+    .wiki-detail-content {
+      flex-direction: column;
+      gap: 16px;
+
+      .content-nav,
+      .article-content-container,
+      .article-toc {
+        width: 100%;
+      }
+
+      .content-nav {
+        order: 1;
+      }
+
+      .article-toc {
+        order: 2;
+      }
+
+      .article-content-container {
+        order: 3;
+      }
+
+      .article-toc {
+        padding-left: 0;
+      }
+    }
+
+    .sticky-class {
+      position: static;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .wiki-detail {
+    padding: 0 12px 20px;
+
+    .wiki-detail-content {
+      .content-nav {
+        padding: 8px;
+      }
+
+      .article-content-container {
+        :deep(.article-header) {
+          margin-bottom: 8px;
+        }
+
+        .article-content {
+          padding: 8px 12px;
+        }
+      }
+    }
   }
 }
 </style>

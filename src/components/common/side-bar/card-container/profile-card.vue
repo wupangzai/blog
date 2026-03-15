@@ -43,7 +43,8 @@ const tagsMapList = computed(() => {
 
 <style lang="less" scoped>
 .profile-card {
-  width: 288px;
+  width: 100%;
+  max-width: 288px;
   padding: 20px 8px;
   background-color: var(--custom-notice-bg-color);
   border-radius: 8px;
@@ -117,6 +118,30 @@ const tagsMapList = computed(() => {
       border-radius: 50%;
       width: 28px;
       height: 28px;
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  .profile-card {
+    max-width: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .profile-card {
+    padding: 18px 12px;
+
+    .tags {
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .links {
+      width: auto;
+      gap: 16px;
     }
   }
 }

@@ -111,4 +111,19 @@ onMounted(() => {
     letter-spacing: 3px;
   }
 }
+
+@media (max-width: 767px) {
+  .achieve-container {
+    gap: 12px;
+
+    .achieve-content {
+      padding: 14px 12px;
+    }
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
 </style>

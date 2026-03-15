@@ -25,6 +25,7 @@
         <article-toc class="article-top" :article-detail="articleDetail" :catalog="catalog" />
       </div>
     </div>
+    <back-to-top />
   </div>
 </template>
 
@@ -39,6 +40,7 @@ import sideBar from '@/components/common/side-bar/index.vue';
 import articleToc from '@/components/article/article-toc/index.vue';
 import lastEdit from '@/components/article/last-edit/index.vue';
 import nextArticle from '@/components/article/next-article/index.vue';
+import backToTop from '@/components/common/back-to-top/index.vue';
 import { MdPreview } from 'md-editor-v3';
 import type { Themes } from 'md-editor-v3';
 import { useStates } from '@/hooks';
@@ -107,15 +109,14 @@ onMounted(() => {
     position: relative;
     display: flex;
     justify-content: center;
-
+    gap: 28px;
     padding: 16px 24px;
   }
 
   .article-detail {
-    width: 917px;
+    width: 100%;
     max-width: 917px;
     height: 100%;
-    margin-right: 28px;
     border-radius: 8px;
     padding: 20px;
     background-color: var(--custom-article-bg-color);
@@ -130,7 +131,7 @@ onMounted(() => {
   }
 
   .side-bar {
-    width: 290px;
+    width: 100%;
     max-width: 290px;
     display: flex;
     flex-direction: column;
@@ -140,6 +141,57 @@ onMounted(() => {
       position: sticky;
       top: 84px;
       right: 0;
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  .article {
+    .article-content-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .article-detail,
+    .side-bar {
+      max-width: 917px;
+    }
+
+    .side-bar {
+      order: 1;
+
+      .article-top {
+        position: static;
+        order: -1;
+      }
+    }
+
+    .article-detail {
+      order: 2;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .article {
+    .article-content-container {
+      padding: 12px;
+    }
+
+    .article-detail {
+      padding: 16px 12px;
+    }
+
+    .next-pre-control {
+      flex-direction: column;
+    }
+
+    .side-bar {
+      :deep(.detail-extra-card) {
+        display: none;
+      }
     }
   }
 }

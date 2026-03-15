@@ -35,7 +35,7 @@ function clickCard() {
 .page-article-list-card {
   width: 100%;
   padding: 12px;
-  height: 74px;
+  min-height: 74px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -74,6 +74,30 @@ function clickCard() {
       .date-text {
         font-size: 12px;
         color: var(--el-color-info);
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .page-article-list-card {
+    height: auto;
+    align-items: flex-start;
+    padding: 12px 8px;
+
+    .cover {
+      img {
+        width: 88px;
+        height: 56px;
+        object-fit: cover;
+      }
+    }
+
+    .description {
+      min-width: 0;
+
+      .title {
+        line-height: 1.5;
       }
     }
   }

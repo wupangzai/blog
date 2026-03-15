@@ -71,4 +71,30 @@ onMounted(() => {
     }
   }
 }
+
+@media (max-width: 960px) {
+  .wiki-container {
+    .wiki-list-content {
+      gap: 16px;
+
+      .wiki-card-item {
+        flex-basis: calc(50% - 8px);
+        max-width: calc(50% - 8px);
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .wiki-container {
+    gap: 16px;
+
+    .wiki-list-content {
+      .wiki-card-item {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+}
 </style>

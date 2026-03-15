@@ -36,9 +36,25 @@ function close() {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+
+  :deep(.el-input) {
+    flex: 1;
+  }
 
   .close-icon {
+    flex: 0 0 auto;
     cursor: pointer;
+  }
+}
+
+@media (max-width: 767px) {
+  .search-dialog-header {
+    align-items: flex-start;
+
+    :deep(.el-input) {
+      width: 100% !important;
+    }
   }
 }
 </style>

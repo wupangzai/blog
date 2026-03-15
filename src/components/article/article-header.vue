@@ -88,4 +88,36 @@ const props = withDefaults(defineProps<Props>(), {
     }
   }
 }
+
+@media (max-width: 1100px) {
+  .article-header {
+    .header-content {
+      width: 100%;
+      max-width: 917px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .article-header {
+    .header-content {
+      min-height: auto;
+      padding: 28px 16px 36px;
+
+      .tags,
+      .icon-group {
+        flex-wrap: wrap;
+      }
+
+      .title {
+        padding-bottom: 16px;
+
+        h1 {
+          font-size: 28px;
+          line-height: 1.35;
+        }
+      }
+    }
+  }
+}
 </style>

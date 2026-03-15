@@ -46,4 +46,22 @@ async function search() {
     }
   }
 }
+
+@media (max-width: 767px) {
+  .operation-search {
+    .el-button {
+      width: auto;
+      min-width: 0;
+      padding: 0 10px;
+    }
+
+    .button-slot {
+      gap: 8px;
+
+      .button-text {
+        margin-right: 0;
+      }
+    }
+  }
+}
 </style>

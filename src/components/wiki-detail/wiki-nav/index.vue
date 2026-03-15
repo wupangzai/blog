@@ -60,4 +60,10 @@ const props = defineProps<Props>();
 .wiki-nav {
   width: 250px;
 }
+
+@media (max-width: 1100px) {
+  .wiki-nav {
+    width: 100%;
+  }
+}
 </style>
