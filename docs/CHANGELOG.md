@@ -105,3 +105,25 @@
 - 本次以样式和前端交互调整为主，未修改后端接口和业务数据结构。
 - 过程中多次对移动端展示顺序与隐藏策略进行回退和重做，当前文档仅保留最终生效方案。
 - 当前未完成构建命令校验记录；若后续需要发布，建议补跑一次 `npm run build` 和主要页面的移动端真机检查。
+## 2026-03-15 Additional Changes
+
+### 修改方案
+
+#### 搜索弹窗移动端输入框缩放修复
+
+- 修复移动端点击搜索弹窗输入框后，软键盘弹出导致页面自动放大的问题。
+- 将搜索输入框在移动端的输入字号提升到 `16px`，并同步调整输入框最小高度与前缀图标字号，避免触发移动端浏览器的自动缩放行为。
+
+涉及文件：
+
+- [src/components/common/page-header/content-operations/search-dialog-header.vue](/d:/Code/vue-vite-template/src/components/common/page-header/content-operations/search-dialog-header.vue)
+
+### 影响范围
+
+- 前台顶部搜索弹窗
+- 移动端搜索输入体验
+
+### 说明
+
+- 本次为增量修复，仅追加搜索弹窗移动端输入框交互优化。
+- 未改动此前 changelog 中已经存在的记录。

@@ -55,6 +55,18 @@ function close() {
     :deep(.el-input) {
       width: 100% !important;
     }
+
+    :deep(.el-input__wrapper) {
+      min-height: 44px;
+    }
+
+    :deep(.el-input__inner) {
+      font-size: 16px;
+    }
+
+    :deep(.el-input__prefix-inner) {
+      font-size: 16px;
+    }
   }
 }
 </style>

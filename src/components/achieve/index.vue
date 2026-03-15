@@ -1,5 +1,5 @@
 <template>
-  <div class="achieve-container" data-aos="fade-up">
+  <div class="achieve-container" data-aos="fade-up" ref="achieveContainerRef">
     <div class="achieve-content" v-for="(achieve, index) in achieveList" :key="index">
       <time class="title">{{ achieve.month }}</time>
       <div class="card-content">
@@ -27,13 +27,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import API from '@/api';
 import type { AchieveType, ArticleType } from '@/api/types';
 import pageArticleListCard from '@/components/common/page-article-list-card/index.vue';
 import { useRouter } from 'vue-router';
 
 const achieveList = ref<AchieveType.AchieveListItem[]>([]);
+const achieveContainerRef = ref<HTMLElement | null>(null);
 const page = ref<ArticleType.Page>({
   current: 1,
   size: 10,
@@ -41,13 +42,30 @@ const page = ref<ArticleType.Page>({
   page: 1,
 });
 
-async function getAchieveList(pageParams: ArticleType.Page) {
+function scrollToFirstAchieveArticle() {
+  const firstCard = achieveContainerRef.value?.querySelector('.list-card-line') as HTMLElement | null;
+  const target = firstCard ?? achieveContainerRef.value;
+  if (!target) return;
+
+  const top = target.getBoundingClientRect().top + window.scrollY - 148;
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: 'smooth',
+  });
+}
+
+async function getAchieveList(pageParams: ArticleType.Page, shouldScroll = true) {
   const res = await API.Achieve.getAchieveList(pageParams);
 
   if (res) {
     achieveList.value = res.data;
     page.value.current = res.current;
     page.value.total = res.total;
+
+    if (shouldScroll) {
+      await nextTick();
+      scrollToFirstAchieveArticle();
+    }
   }
 }
 const router = useRouter();
@@ -61,7 +79,7 @@ function clickCard(id: number) {
 }
 
 onMounted(() => {
-  getAchieveList(page.value);
+  getAchieveList(page.value, false);
 });
 </script>
 
