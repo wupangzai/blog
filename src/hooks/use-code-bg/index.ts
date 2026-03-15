@@ -6,12 +6,14 @@ export function useCodeBg() {
   let resizeHandler: (() => void) | null = null;
 
   onMounted(() => {
-    const cvs = document.getElementById('code-bg') as HTMLCanvasElement | null;
-    if (!cvs || !cvs.parentElement) return;
+    const canvasElement = document.getElementById('code-bg') as HTMLCanvasElement | null;
+    if (!canvasElement || !canvasElement.parentElement) return;
 
-    const parent = cvs.parentElement;
-    const ctx = cvs.getContext('2d');
-    if (!ctx) return;
+    const cvs: HTMLCanvasElement = canvasElement;
+    const parent = canvasElement.parentElement;
+    const context = canvasElement.getContext('2d');
+    if (!context) return;
+    const ctx: CanvasRenderingContext2D = context;
 
     const isMobile = window.innerWidth <= 767;
     const ratio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
