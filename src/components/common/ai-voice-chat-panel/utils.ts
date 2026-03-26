@@ -107,9 +107,13 @@ export const buildAudioBars = async (blob: Blob, barCount = 32) => {
    * 兼容 Safari 的 AudioContext 构造器读取方式。
    * 如果当前环境不支持，则返回一组默认波形占位。
    */
-  const AudioContextConstructor = window.AudioContext || (window as typeof window & {
-    webkitAudioContext?: typeof AudioContext
-  }).webkitAudioContext;
+  const AudioContextConstructor =
+    window.AudioContext ||
+    (
+      window as typeof window & {
+        webkitAudioContext?: typeof AudioContext;
+      }
+    ).webkitAudioContext;
 
   if (!AudioContextConstructor) {
     return Array.from({ length: barCount }, () => 0.38);
@@ -148,9 +152,7 @@ export const buildAudioBars = async (blob: Blob, barCount = 32) => {
       return Math.min(Math.max(peak * 1.8, 0.18), 1);
     });
 
-    return bars.some((value) => value > 0.2)
-      ? bars
-      : Array.from({ length: barCount }, () => 0.38);
+    return bars.some((value) => value > 0.2) ? bars : Array.from({ length: barCount }, () => 0.38);
   } catch {
     return Array.from({ length: barCount }, () => 0.38);
   } finally {
@@ -170,13 +172,10 @@ export const buildAudioBars = async (blob: Blob, barCount = 32) => {
  */
 export const createAudioMessagePayload = async (
   blob: Blob,
-  audioUrl: string,
+  audioUrl: string
 ): Promise<AudioMessagePayload> => {
   /** 时长和波形条可以并行计算，减少录音结束后的等待时间。 */
-  const [duration, bars] = await Promise.all([
-    getAudioDuration(audioUrl),
-    buildAudioBars(blob),
-  ]);
+  const [duration, bars] = await Promise.all([getAudioDuration(audioUrl), buildAudioBars(blob)]);
 
   return {
     url: audioUrl,

@@ -18,12 +18,6 @@
     </div>
 
     <div class="operation-card">
-      <span class="operation-label">刚刚录下的音频</span>
-      <audio v-if="recordedAudioUrl" :src="recordedAudioUrl" controls class="audio-player" />
-      <p v-else class="operation-empty">点击录音并停止后，这里会出现你刚刚录下的音频。</p>
-    </div>
-
-    <div class="operation-card">
       <span class="operation-label">音频文件</span>
       <audio v-if="latestResponse?.audioUrl" :src="latestResponse.audioUrl" controls class="audio-player" />
       <p v-else class="operation-empty">服务端音频返回后会显示在这里。</p>
@@ -41,11 +35,11 @@ import type { MockResponse } from '../types';
 
 /**
  * 右侧操作面板入参。
- * 用于展示最近一次 mock 返回、用户录音回放以及当前流式速度配置。
+ * 用于展示最近一次 mock 返回以及当前流式速度配置。
+ * 用户自己的录音不再在右侧单独回放，避免和主对话区职责重复。
  */
 defineProps<{
   latestResponse: MockResponse | null;
-  recordedAudioUrl: string | null;
   streamSpeed: number;
 }>();
 </script>

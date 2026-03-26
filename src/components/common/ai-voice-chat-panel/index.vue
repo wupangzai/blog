@@ -15,18 +15,22 @@
           :draft-text="draftText"
           @update:draft-text="draftText = $event"
           @send-text="sendTypedMessage"
-          @start-recording="startRecording"
+          @start-recording="handleStartRecording"
         />
       </div>
     </section>
 
     <operation-panel
       :latest-response="latestResponse"
-      :recorded-audio-url="recordedAudioUrl"
       :stream-speed="props.streamSpeed"
     />
 
-    <recording-modal v-if="isRecording" :bars="bars" :has-voice="hasVoice" @stop="stopRecording" />
+    <recording-modal
+      v-if="isRecording"
+      :bars="bars"
+      :has-voice="hasVoice"
+      @stop="handleStopRecording"
+    />
   </div>
 </template>
 
@@ -62,15 +66,11 @@ const props = withDefaults(
 /** 当前文本输入框草稿内容。 */
 const draftText = ref('');
 /** 是否正在录音，用于控制录音弹窗显隐和顶部状态文案。 */
-const isRecording = ref(false);
-/** 是否正在等待 mock 服务端结果。 */
 const isResponding = ref(false);
 /** 是否处于录音停止收尾阶段，避免重复点击停止。 */
 const isStoppingRecording = ref(false);
 /** 最近一次服务端返回的数据，用于右侧操作面板展示。 */
 const latestResponse = ref<MockResponse | null>(null);
-/** 最近一次用户录音生成的音频地址，用于右侧操作区回放。 */
-const recordedAudioUrl = ref<string | null>(null);
 /** 对话区消息列表，统一管理用户消息和服务端消息。 */
 const messages = ref<ChatMessage[]>([
   {
@@ -91,14 +91,17 @@ const panelStatus = computed(() =>
   isRecording.value ? '录音中' : isResponding.value ? '处理中' : '待命'
 );
 
-/** 录音波形 composable，对外提供实时波形数据和会话流控制方法。 */
+/** 录音 hook，统一提供设备状态、录音控制与录音结果。 */
 const {
+  isDeviceAvailable,
+  isRecording,
   bars,
   hasVoice,
-  getStream,
-  start: startWaveform,
-  stop: stopWaveform,
-  release: releaseWaveform,
+  startRecording,
+  stopRecording,
+  audioBlob,
+  pcmBuffer,
+  release: releaseRecorder,
 } = useLiveWaveform(props.recordingBars);
 
 /** 自增消息 id，确保每条消息拥有稳定唯一标识。 */
@@ -107,12 +110,6 @@ let messageId = messages.value.length;
 let streamTimer: number | null = null;
 /** 当前页面生命周期内创建过的对象地址，卸载时统一回收。 */
 let pendingAudioUrls: string[] = [];
-/** 当前录音对应的 MediaRecorder 实例。 */
-let mediaRecorder: MediaRecorder | null = null;
-/** MediaRecorder 分片回调累计得到的二进制块。 */
-let recordedChunks: Blob[] = [];
-/** 录音停止后的异步清理任务，用于等待 blob 生成和波形会话释放。 */
-let recordingCleanupPromise: Promise<void> | null = null;
 /** 当前待转译用户消息的 id，用于服务端返回后回填真实转译文本。 */
 let pendingVoiceMessageId: number | null = null;
 
@@ -190,108 +187,6 @@ const registerAudioUrl = (url: string) => {
   pendingAudioUrls.push(url);
   return url;
 };
-
-/**
- * 选择浏览器支持的录音编码格式。
- * 优先使用较通用的 webm/opus，其次降级到其它可用格式。
- *
- * @returns 当前浏览器支持的 mimeType，若没有则返回空字符串
- */
-const getPreferredMimeType = () => {
-  const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
-
-  return candidates.find((item) => MediaRecorder.isTypeSupported(item)) ?? '';
-};
-
-/**
- * 把当前录音分片组装成可播放的对象地址。
- * 当前只用于右侧操作面板保留“最近一次录音”的回放入口。
- *
- * @returns 录音对象地址；如果当前没有有效录音内容，则返回 `null`
- */
-const resolveRecordedAudioUrl = () => {
-  if (recordedChunks.length === 0) {
-    return null;
-  }
-
-  const audioBlob = new Blob(recordedChunks, {
-    type: mediaRecorder?.mimeType || 'audio/webm',
-  });
-  const audioUrl = URL.createObjectURL(audioBlob);
-
-  recordedAudioUrl.value = audioUrl;
-  return audioUrl;
-};
-
-/**
- * 创建并启动 MediaRecorder。
- * 它会复用 `useLiveWaveform` 当前会话里的媒体流，保证波形和录音来自同一输入源。
- */
-const startMediaRecording = () => {
-  const stream = getStream();
-
-  if (!stream) {
-    return;
-  }
-
-  if (recordedAudioUrl.value) {
-    URL.revokeObjectURL(recordedAudioUrl.value);
-    recordedAudioUrl.value = null;
-  }
-
-  recordedChunks = [];
-  const mimeType = getPreferredMimeType();
-  mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-
-  mediaRecorder.addEventListener('dataavailable', (event) => {
-    if (event.data.size > 0) {
-      recordedChunks.push(event.data);
-    }
-  });
-
-  mediaRecorder.addEventListener('stop', () => {
-    /**
-     * 录音停止后的统一清理流程：
-     * 1. 生成录音对象地址，供右侧操作区回放
-     * 2. 停止当前录音波形会话
-     */
-    recordingCleanupPromise = (async () => {
-      resolveRecordedAudioUrl();
-
-      await stopWaveform();
-      mediaRecorder = null;
-      recordingCleanupPromise = null;
-    })();
-  });
-
-  mediaRecorder.start();
-};
-
-/**
- * 主动结束当前 MediaRecorder，并等待录音文件和波形会话清理完成。
- * 只有在真正完成收尾后，才允许后续继续开启新一轮录音。
- *
- * @returns 本次录音完全结束的 Promise
- */
-const finalizeRecording = () =>
-  new Promise<void>((resolve) => {
-    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-      resolve();
-      return;
-    }
-
-    const currentRecorder = mediaRecorder;
-    const handleStop = () => {
-      currentRecorder.removeEventListener('stop', handleStop);
-      void (async () => {
-        await recordingCleanupPromise;
-        resolve();
-      })();
-    };
-
-    currentRecorder.addEventListener('stop', handleStop);
-    currentRecorder.stop();
-  });
 
 /**
  * 启动服务端消息的伪流式输出。
@@ -405,6 +300,12 @@ const simulateVoiceRequest = (userMessageId: number) => {
   isResponding.value = true;
 
   window.setTimeout(async () => {
+    /**
+     * 当前 mock 仅使用录音结果作为“已完成录音”的前置条件。
+     * 真实接后端时，这里可以直接把 hook 暴露的 `audioBlob`、`pcmBuffer` 上传给服务端。
+     */
+    void audioBlob.value;
+    void pcmBuffer.value;
     const response = await buildMockResponse();
     pushConversationFromResponse(response, userMessageId);
   }, props.mockDelay);
@@ -416,35 +317,17 @@ const simulateVoiceRequest = (userMessageId: number) => {
  *
  * @returns 录音开始流程的 Promise
  */
-const startRecording = async () => {
+const handleStartRecording = async () => {
   if (isResponding.value || isRecording.value || isStoppingRecording.value) {
     return;
   }
 
   try {
-    await startWaveform();
+    await startRecording();
   } catch {
-    try {
-      await stopWaveform();
-    } catch {
-      // ignore cleanup error and surface the original init failure
-    }
-
-    window.alert('无法访问麦克风，请检查浏览器录音权限。');
-    return;
-  }
-
-  try {
-    startMediaRecording();
-    isRecording.value = true;
-  } catch {
-    try {
-      await stopWaveform();
-    } catch {
-      // ignore cleanup error and surface the recorder failure
-    }
-
-    window.alert('录音初始化失败，请稍后重试。');
+    window.alert(
+      isDeviceAvailable.value ? '录音初始化失败，请稍后重试。' : '无法访问麦克风，请检查浏览器录音权限。'
+    );
   }
 };
 
@@ -454,7 +337,7 @@ const startRecording = async () => {
  *
  * @returns 停止录音并触发 mock 转译流程的 Promise
  */
-const stopRecording = async () => {
+const handleStopRecording = async () => {
   if (!isRecording.value || isStoppingRecording.value) {
     return;
   }
@@ -465,13 +348,7 @@ const stopRecording = async () => {
   ).id;
 
   try {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      await finalizeRecording();
-    } else {
-      await stopWaveform();
-    }
-
-    isRecording.value = false;
+    await stopRecording();
     if (pendingVoiceMessageId !== null) {
       simulateVoiceRequest(pendingVoiceMessageId);
     }
@@ -519,20 +396,13 @@ const sendTypedMessage = () => {
  * 会停止录音、关闭波形会话、清理定时器，并释放所有对象地址。
  */
 onBeforeUnmount(() => {
-  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-    mediaRecorder.stop();
-  }
-
-  void releaseWaveform();
+  void releaseRecorder();
 
   if (streamTimer) {
     window.clearInterval(streamTimer);
   }
 
   pendingAudioUrls.forEach((url) => URL.revokeObjectURL(url));
-  if (recordedAudioUrl.value) {
-    URL.revokeObjectURL(recordedAudioUrl.value);
-  }
   pendingAudioUrls = [];
 });
 </script>
