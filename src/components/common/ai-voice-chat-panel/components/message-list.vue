@@ -1,54 +1,104 @@
 <template>
-  <div ref="messageListRef" class="message-list">
-    <div
-      v-for="message in messages"
-      :key="message.id"
-      class="message-row"
-      :class="`is-${message.role}`"
+  <div class="message-list">
+    <dynamic-scroller
+      ref="messageListRef"
+      class="message-list__scroller"
+      :items="messages"
+      :min-item-size="96"
+      key-field="id"
     >
-      <div class="message-bubble">
-        <div class="message-meta">
-          <span>{{ message.role === 'user' ? '用户' : '服务端' }}</span>
-          <span>{{ message.statusText }}</span>
-        </div>
-        <p v-if="message.content" class="message-text">{{ getDisplayContent(message) }}</p>
-        <voice-message-bubble
-          v-if="message.audio"
-          class="message-audio"
-          :url="message.audio.url"
-          :bars="message.audio.bars"
-          :duration="message.audio.duration"
-          :variant="message.role"
-          :autoplay="message.autoPlayAudio"
-        />
-      </div>
-    </div>
+      <template #default="{ item: rawItem, index, active }">
+        <dynamic-scroller-item
+          :item="rawItem"
+          :active="active"
+          :size-dependencies="getItemSizeDependencies(rawItem)"
+          :data-index="index"
+        >
+          <div class="message-row" :class="`is-${toMessage(rawItem).role}`">
+            <div class="message-bubble">
+              <div class="message-meta">
+                <span>{{ toMessage(rawItem).role === 'user' ? '用户' : '服务端' }}</span>
+                <span>{{ toMessage(rawItem).statusText }}</span>
+              </div>
+              <p v-if="toMessage(rawItem).content" class="message-text">
+                {{ getDisplayContent(toMessage(rawItem)) }}
+              </p>
+              <voice-message-bubble
+                v-if="toMessage(rawItem).audio"
+                class="message-audio"
+                :bars="toMessage(rawItem).audio?.bars ?? []"
+                :duration="toMessage(rawItem).audio?.duration ?? 0"
+                :variant="toMessage(rawItem).role"
+                :is-playing="activeAudioMessageId === toMessage(rawItem).id"
+                :current-time="audioProgressMap[toMessage(rawItem).id] ?? 0"
+                @toggle="emit('toggle-audio', toMessage(rawItem).id)"
+              />
+            </div>
+          </div>
+        </dynamic-scroller-item>
+      </template>
+    </dynamic-scroller>
   </div>
 </template>
 
 <script setup lang="ts">
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { nextTick, ref, watch } from 'vue';
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 import VoiceMessageBubble from './voice-message-bubble.vue';
 import { getDisplayContent } from '../utils';
 import type { ChatMessage } from '../types';
 
-/** 消息列表入参，承载完整的对话消息集合。 */
+/** 消息列表入参，承载完整的对话消息集合以及音频播放状态。 */
 const props = defineProps<{
   messages: ChatMessage[];
+  activeAudioMessageId: number | null;
+  audioProgressMap: Record<number, number>;
 }>();
 
-/** 消息列表根节点引用，用于在消息变化后滚动到底部。 */
-const messageListRef = ref<HTMLElement | null>(null);
+/** 消息列表对外抛出统一的音频点击事件。 */
+const emit = defineEmits<{
+  'toggle-audio': [messageId: number]
+}>();
+
+/** 虚拟滚动根节点引用，用于在新增消息后滚动到底部。 */
+const messageListRef = ref<InstanceType<typeof DynamicScroller> | null>(null);
 
 /**
- * 把消息列表滚动到最底部。
- * 当新消息追加或流式消息长度变化时，会自动调用它确保最新内容可见。
+ * 把虚拟滚动 slot 中的 `unknown` item 收窄为业务消息类型。
  *
- * @returns DOM 完成更新后的滚动 Promise
+ * @param item DynamicScroller 默认暴露的原始项
+ * @returns 可安全供模板使用的聊天消息对象
+ */
+const toMessage = (item: unknown) => item as ChatMessage;
+
+/**
+ * 为虚拟滚动提供尺寸依赖。
+ * 当文本长度、状态文案或音频信息变化时，会触发当前项重新计算高度。
+ *
+ * @param item 当前消息项
+ * @returns 会影响消息高度的关键依赖数组
+ */
+const getItemSizeDependencies = (item: unknown) => {
+  const message = toMessage(item);
+  return [
+    message.content,
+    message.statusText,
+    message.displayLength ?? 0,
+    Boolean(message.audio),
+    message.audio?.duration ?? 0,
+  ];
+};
+
+/**
+ * 把虚拟滚动列表滚动到最底部。
+ * 因为使用了 DynamicScroller，需要等待 DOM 和尺寸重新计算完成后再执行滚动。
+ *
+ * @returns 滚动完成的 Promise
  */
 const scrollToBottom = async () => {
   await nextTick();
-  const target = messageListRef.value;
+  const target = messageListRef.value?.$el as HTMLElement | undefined;
 
   if (!target) {
     return;
@@ -58,15 +108,16 @@ const scrollToBottom = async () => {
 };
 
 /**
- * 监听消息数量、消息状态和流式文本长度变化。
- * 只要界面内容高度可能变化，就自动滚动到最底部。
+ * 监听消息数量、状态和流式内容长度变化。
+ * 每次内容高度变化后都自动滚动到底部，保证最新消息始终可见。
  */
 watch(
-  () => props.messages.map((item) => `${item.id}-${item.displayLength ?? 0}-${item.status}`).join('|'),
+  () =>
+    props.messages.map((item) => `${item.id}-${item.displayLength ?? 0}-${item.status}-${item.content.length}`).join('|'),
   () => {
     void scrollToBottom();
   },
-  { immediate: true },
+  { immediate: true }
 );
 </script>
 
@@ -75,12 +126,18 @@ watch(
   height: 100%;
   min-height: 0;
   padding: 0 28px 24px;
+  overflow: hidden;
+}
+
+.message-list__scroller {
+  height: 100%;
+  min-height: 0;
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.message-list::-webkit-scrollbar {
+.message-list__scroller::-webkit-scrollbar {
   width: 0;
   height: 0;
 }

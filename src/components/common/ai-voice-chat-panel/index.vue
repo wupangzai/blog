@@ -10,7 +10,12 @@
       </header>
 
       <div class="chat-body">
-        <message-list :messages="messages" />
+        <message-list
+          :messages="messages"
+          :active-audio-message-id="playingAudioMessageId"
+          :audio-progress-map="audioProgressMap"
+          @toggle-audio="handleToggleMessageAudio"
+        />
         <chat-input-panel
           :draft-text="draftText"
           @update:draft-text="draftText = $event"
@@ -20,10 +25,7 @@
       </div>
     </section>
 
-    <operation-panel
-      :latest-response="latestResponse"
-      :stream-speed="props.streamSpeed"
-    />
+    <operation-panel :latest-response="latestResponse" :stream-speed="props.streamSpeed" />
 
     <recording-modal
       v-if="isRecording"
@@ -35,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref } from 'vue';
 import ChatInputPanel from './components/chat-input-panel.vue';
 import MessageList from './components/message-list.vue';
 import OperationPanel from './components/operation-panel.vue';
@@ -100,7 +102,6 @@ const {
   startRecording,
   stopRecording,
   audioBlob,
-  pcmBuffer,
   release: releaseRecorder,
 } = useLiveWaveform(props.recordingBars);
 
@@ -112,6 +113,62 @@ let streamTimer: number | null = null;
 let pendingAudioUrls: string[] = [];
 /** 当前待转译用户消息的 id，用于服务端返回后回填真实转译文本。 */
 let pendingVoiceMessageId: number | null = null;
+/** 根组件统一管理的音频播放器实例，所有消息共用这一个 Audio。 */
+const messageAudio = new Audio();
+/** 当前被选中并绑定到播放器的消息 id。 */
+const currentAudioMessageId = ref<number | null>(null);
+/** 当前真正处于播放中的消息 id，仅用于驱动界面播放态。 */
+const playingAudioMessageId = ref<number | null>(null);
+/** 各条语音消息最近一次播放进度，单位秒。 */
+const audioProgressMap = reactive<Record<number, number>>({});
+/** 标记当前 pause 事件是否来自程序内部的切源/主动暂停，避免误伤用户点击播放状态。 */
+let isInternalAudioStateChange = false;
+/** 每次播放请求递增一次，用于忽略旧请求产生的迟到事件。 */
+let audioPlayRequestId = 0;
+
+/** 播放过程中持续记录当前消息的播放进度。 */
+messageAudio.addEventListener('timeupdate', () => {
+  if (currentAudioMessageId.value === null) {
+    return;
+  }
+
+  audioProgressMap[currentAudioMessageId.value] = messageAudio.currentTime || 0;
+});
+
+/** 播放真正开始后再同步“正在播放”的界面状态。 */
+messageAudio.addEventListener('play', () => {
+  if (currentAudioMessageId.value === null) {
+    return;
+  }
+
+  playingAudioMessageId.value = currentAudioMessageId.value;
+});
+
+/** 手动暂停时保留进度，并取消“正在播放”的标记。 */
+messageAudio.addEventListener('pause', () => {
+  if (isInternalAudioStateChange) {
+    return;
+  }
+
+  if (currentAudioMessageId.value === null) {
+    return;
+  }
+
+  audioProgressMap[currentAudioMessageId.value] = messageAudio.currentTime || 0;
+  playingAudioMessageId.value = null;
+});
+
+/** 播放结束后把进度归零，下一次点击从头开始播放。 */
+messageAudio.addEventListener('ended', () => {
+  if (currentAudioMessageId.value === null) {
+    return;
+  }
+
+  audioProgressMap[currentAudioMessageId.value] = 0;
+  playingAudioMessageId.value = null;
+  currentAudioMessageId.value = null;
+  messageAudio.currentTime = 0;
+});
 
 /**
  * 生成新的消息 id。
@@ -174,7 +231,6 @@ const createAssistantMessage = (response: MockResponse): ChatMessage => ({
   status: 'streaming',
   statusText: '输出中',
   audio: response.assistantAudio,
-  autoPlayAudio: true,
 });
 
 /**
@@ -186,6 +242,123 @@ const createAssistantMessage = (response: MockResponse): ChatMessage => ({
 const registerAudioUrl = (url: string) => {
   pendingAudioUrls.push(url);
   return url;
+};
+
+/**
+ * 根据消息 id 获取对应的语音地址。
+ *
+ * @param messageId 目标消息 id
+ * @returns 当前消息对应的音频地址；不存在时返回空字符串
+ */
+const getMessageAudioUrl = (messageId: number) =>
+  messages.value.find((item) => item.id === messageId)?.audio?.url ?? '';
+
+/**
+ * 根据消息 id 获取对应语音时长。
+ *
+ * @param messageId 目标消息 id
+ * @returns 当前消息的语音总时长，缺失时返回 0
+ */
+const getMessageAudioDuration = (messageId: number) =>
+  messages.value.find((item) => item.id === messageId)?.audio?.duration ?? 0;
+
+/**
+ * 规范化恢复播放时的起始时间。
+ * 如果上次进度已经接近结尾，则直接从头开始播放，避免“点击后立刻结束”。
+ *
+ * @param messageId 目标消息 id
+ * @param restart 是否强制从头播放
+ * @returns 本次播放应使用的起始秒数
+ */
+const resolvePlaybackStartTime = (messageId: number, restart: boolean) => {
+  if (restart) {
+    return 0;
+  }
+
+  const savedTime = audioProgressMap[messageId] ?? 0;
+  const duration = getMessageAudioDuration(messageId);
+
+  if (!duration) {
+    return savedTime;
+  }
+
+  return savedTime >= Math.max(duration - 0.12, 0) ? 0 : savedTime;
+};
+
+/**
+ * 暂停当前正在播放的消息音频。
+ * 进度会保留在 `audioProgressMap` 中，方便用户稍后继续播放。
+ */
+const pauseActiveMessageAudio = (clearCurrentMessage = true) => {
+  isInternalAudioStateChange = true;
+
+  if (currentAudioMessageId.value !== null) {
+    audioProgressMap[currentAudioMessageId.value] = messageAudio.currentTime || 0;
+  }
+
+  messageAudio.pause();
+  playingAudioMessageId.value = null;
+  if (clearCurrentMessage) {
+    currentAudioMessageId.value = null;
+  }
+  isInternalAudioStateChange = false;
+};
+
+/**
+ * 播放指定消息的音频。
+ * 如果当前有别的消息正在播放，会先暂停旧音频再切换到新消息。
+ *
+ * @param messageId 目标消息 id
+ * @param restart 是否强制从头开始播放
+ */
+const playMessageAudio = async (messageId: number, restart = false) => {
+  const requestId = ++audioPlayRequestId;
+  const targetAudioUrl = getMessageAudioUrl(messageId);
+
+  if (!targetAudioUrl) {
+    return;
+  }
+
+  if (currentAudioMessageId.value !== null && currentAudioMessageId.value !== messageId) {
+    pauseActiveMessageAudio();
+  }
+
+  isInternalAudioStateChange = true;
+  currentAudioMessageId.value = messageId;
+  playingAudioMessageId.value = null;
+
+  if (messageAudio.src !== targetAudioUrl) {
+    messageAudio.src = targetAudioUrl;
+  }
+
+  messageAudio.currentTime = resolvePlaybackStartTime(messageId, restart);
+  try {
+    await messageAudio.play();
+    if (requestId === audioPlayRequestId && currentAudioMessageId.value === messageId) {
+      playingAudioMessageId.value = messageId;
+    }
+  } finally {
+    isInternalAudioStateChange = false;
+  }
+};
+
+/**
+ * 处理消息语音点击事件。
+ * 同一条消息可以暂停后继续播放；切换到其它消息时会自动中断当前播放。
+ *
+ * @param messageId 被点击的消息 id
+ */
+const handleToggleMessageAudio = async (messageId: number) => {
+  if (currentAudioMessageId.value === messageId && playingAudioMessageId.value === messageId) {
+    pauseActiveMessageAudio(false);
+    return;
+  }
+
+  try {
+    await playMessageAudio(messageId);
+  } catch {
+    pauseActiveMessageAudio();
+  }
 };
 
 /**
@@ -240,16 +413,17 @@ const startAssistantStream = (messageIdToStream: number, content: string) => {
 
 /**
  * 构造一份随机 mock 响应。
- * 同时附带一段静音音频与语音气泡数据，用于模拟服务端返回的回答语音。
+ * 优先复用用户刚刚录下来的音频，模拟服务端返回回答语音。
+ * 如果当前没有有效录音结果，再退回到静音占位音频。
  *
  * @returns 一次完整的 mock 返回数据
  */
 const buildMockResponse = async (): Promise<MockResponse> => {
   const randomIndex = Math.floor(Math.random() * mockConversationSeeds.length);
   const seed = mockConversationSeeds[randomIndex];
-  const audioBlob = createSilentWavBlob();
-  const audioUrl = registerAudioUrl(URL.createObjectURL(audioBlob));
-  const assistantAudio = await createAudioMessagePayload(audioBlob, audioUrl);
+  const responseAudioBlob = audioBlob.value ?? createSilentWavBlob();
+  const audioUrl = registerAudioUrl(URL.createObjectURL(responseAudioBlob));
+  const assistantAudio = await createAudioMessagePayload(responseAudioBlob, audioUrl);
 
   return {
     userText: seed.userText,
@@ -269,6 +443,9 @@ const pushAssistantMessage = (response: MockResponse) => {
 
   latestResponse.value = response;
   startAssistantStream(assistantMessage.id, response.assistantText);
+  void playMessageAudio(assistantMessage.id, true).catch(() => {
+    pauseActiveMessageAudio();
+  });
 };
 
 /**
@@ -301,11 +478,9 @@ const simulateVoiceRequest = (userMessageId: number) => {
 
   window.setTimeout(async () => {
     /**
-     * 当前 mock 仅使用录音结果作为“已完成录音”的前置条件。
+     * 当前 mock 仅以“录音已完成”为前提触发返回。
      * 真实接后端时，这里可以直接把 hook 暴露的 `audioBlob`、`pcmBuffer` 上传给服务端。
      */
-    void audioBlob.value;
-    void pcmBuffer.value;
     const response = await buildMockResponse();
     pushConversationFromResponse(response, userMessageId);
   }, props.mockDelay);
@@ -322,11 +497,15 @@ const handleStartRecording = async () => {
     return;
   }
 
+  pauseActiveMessageAudio();
+
   try {
     await startRecording();
   } catch {
     window.alert(
-      isDeviceAvailable.value ? '录音初始化失败，请稍后重试。' : '无法访问麦克风，请检查浏览器录音权限。'
+      isDeviceAvailable.value
+        ? '录音初始化失败，请稍后重试。'
+        : '无法访问麦克风，请检查浏览器录音权限。'
     );
   }
 };
@@ -396,6 +575,8 @@ const sendTypedMessage = () => {
  * 会停止录音、关闭波形会话、清理定时器，并释放所有对象地址。
  */
 onBeforeUnmount(() => {
+  pauseActiveMessageAudio();
+  messageAudio.src = '';
   void releaseRecorder();
 
   if (streamTimer) {
@@ -413,8 +594,7 @@ onBeforeUnmount(() => {
   top: 50%;
   left: 50%;
   z-index: 9999;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
   width: 1280px;
   height: 1024px;
   overflow: hidden;
@@ -434,10 +614,15 @@ onBeforeUnmount(() => {
 }
 
 .chat-column {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex: 2;
+  flex-direction: column;
   min-height: 0;
   border-right: 1px solid rgb(109 132 198 / 12%);
+}
+
+:deep(.operation-column) {
+  flex: 1;
 }
 
 .panel-header {
@@ -470,9 +655,18 @@ onBeforeUnmount(() => {
 }
 
 .chat-body {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) 320px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   min-height: 0;
   overflow: hidden;
+}
+
+:deep(.message-list) {
+  flex: 1;
+}
+
+:deep(.input-panel) {
+  flex: 0 0 320px;
 }
 </style>

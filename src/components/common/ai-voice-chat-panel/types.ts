@@ -39,7 +39,6 @@ export interface ChatMessage {
   status: MessageStatus
   statusText: string
   audio?: AudioMessagePayload
-  autoPlayAudio?: boolean
 }
 
 /**
